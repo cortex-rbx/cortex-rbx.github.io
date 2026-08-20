@@ -1,0 +1,484 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="dark"><title>Cortex — AI for Roblox games</title><style>/* Тёмная тема: чёрный холст, белый текст, перспективная сетка вдаль.
+   Всё движение — средствами CSS: ни одной библиотеки, потому что страница
+   обязана открываться с телефона по медленной сети, и каждый лишний килобайт
+   это ушедший человек. */
+:root{
+  /* Шкала по 4px и типографика на clamp: один источник ритма для всей
+     страницы. Без этого блоки набираются «на глаз» и разнобой читается
+     как небрежность, даже когда каждый элемент по отдельности хорош. */
+  --s1:4px; --s2:8px; --s3:12px; --s4:16px; --s5:24px; --s6:32px;
+  --s7:48px; --s8:64px; --s9:96px;
+  --r1:10px; --r2:14px; --r3:20px; --r4:28px;
+  --ease:cubic-bezier(.22,1,.36,1);
+  --bg:#05060A; --bg2:#0B0D14; --card:#0D1017;
+  --line:rgba(255,255,255,.10); --line2:rgba(255,255,255,.055);
+  --ink:#F4F7FB; --ink2:#9AA6B6; --ink3:#5F6B7C;
+  --sky:#F4F7FB; --sky2:#AEB6C2; --sky3:rgba(255,255,255,.30); --sky4:rgba(255,255,255,.07);
+  --deep:#F4F7FB;
+  --ok:#34D399; --warn:#FBBF24; --bad:#F87171;
+  --grid:rgba(255,255,255,.085);
+  --shadow:0 1px 2px rgba(0,0,0,.5), 0 14px 34px -18px rgba(0,0,0,.7);
+  --shadow2:0 14px 44px -14px rgba(255,255,255,.28),
+            0 34px 66px -30px rgba(0,0,0,.8);
+  --glass:rgba(8,10,16,.66);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font:16px/1.62 ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  -webkit-font-smoothing:antialiased; overflow-x:hidden;
+}
+/* Перспективная сетка-пол: уходит к горизонту и медленно течёт на зрителя.
+   Чистый CSS, весит ноль. Даёт ощущение глубины и «современного минимализма»,
+   не перетягивая внимание с текста. */
+body::before{
+  content:""; position:fixed; left:-30%; right:-30%; bottom:-8%; height:74vh; z-index:-2;
+  background-image:
+    linear-gradient(var(--grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size:58px 58px;
+  transform:perspective(300px) rotateX(60deg);
+  transform-origin:50% 100%;
+  animation:flow 9s linear infinite;
+  mask-image:linear-gradient(transparent 0%, #000 58%);
+  -webkit-mask-image:linear-gradient(transparent 0%, #000 58%);
+}
+@keyframes flow{to{background-position:0 58px}}
+/* Мягкое белое сияние на линии горизонта и сверху — глубина без пестроты. */
+body::after{
+  content:""; position:fixed; inset:0; z-index:-1; pointer-events:none;
+  background:
+    radial-gradient(70vw 34vh at 50% 100%, rgba(255,255,255,.14), transparent 62%),
+    radial-gradient(52vw 30vh at 50% -6%, rgba(255,255,255,.08), transparent 60%);
+  animation:breathe 18s ease-in-out infinite alternate;
+}
+@keyframes breathe{from{opacity:.75}to{opacity:1}}
+.wrap{max-width:1100px;margin:0 auto;padding:0 20px}
+.rise{animation:rise linear both;animation-timeline:view();animation-range:entry 0% cover 28%}
+@keyframes rise{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){
+  .rise{animation:none} body::before,body::after{animation:none}
+}
+
+/* ── шапка ─────────────────────────────────────────────────────────── */
+header{position:sticky;top:0;z-index:20;backdrop-filter:blur(16px);
+  background:rgba(5,6,10,.72);border-bottom:1px solid var(--line)}
+header .wrap{display:flex;align-items:center;gap:18px;height:62px}
+.logo{font:800 18px/1 ui-sans-serif;letter-spacing:-.025em;display:flex;gap:10px;
+  align-items:center;color:var(--ink);text-decoration:none}
+.dot{width:10px;height:10px;border-radius:50%;background:var(--sky);
+  box-shadow:0 0 0 4px rgba(255,255,255,.16);animation:pulse 2.6s ease-in-out infinite}
+@keyframes pulse{50%{box-shadow:0 0 0 10px rgba(255,255,255,0)}}
+nav{margin-left:auto;display:flex;gap:6px;flex-wrap:wrap}
+nav a{font:600 13.5px/1 ui-sans-serif;color:var(--ink2);text-decoration:none;
+  padding:10px 13px;border-radius:9px;transition:.18s}
+nav a:hover{color:var(--deep);background:var(--sky4)}
+nav a.cta{color:#05060A;background:var(--sky);box-shadow:0 8px 20px -8px var(--sky)}
+nav a.cta:hover{background:var(--sky2);color:#05060A}
+
+/* ── первый экран ──────────────────────────────────────────────────── */
+.hero{padding:88px 0 54px;text-align:center}
+.badge{display:inline-flex;align-items:center;gap:9px;font:600 12.5px/1 ui-sans-serif;
+  letter-spacing:.02em;color:var(--deep);border:1px solid var(--sky3);
+  background:var(--sky4);padding:9px 15px;border-radius:99px;margin-bottom:24px}
+h1{margin:0 0 20px;font:800 clamp(36px,7vw,68px)/1.03 ui-sans-serif;letter-spacing:-.038em}
+h1 .grad{background:linear-gradient(100deg,var(--sky),var(--deep) 34%,var(--sky2) 66%,var(--sky));
+  background-size:220% 100%;-webkit-background-clip:text;background-clip:text;
+  color:transparent;animation:slide 7s ease-in-out infinite}
+@keyframes slide{50%{background-position:100% 0}}
+.lead{margin:0 auto 32px;max-width:60ch;font-size:19.5px;color:var(--ink2)}
+.row{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.btn{font:700 15px/1 ui-sans-serif;padding:15px 27px;border-radius:11px;border:0;
+  cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:9px;
+  transition:transform .16s, box-shadow .16s, background .16s}
+.btn.primary{background:var(--sky);color:#05060A;box-shadow:0 14px 32px -12px var(--sky)}
+.btn.primary:hover{transform:translateY(-2px);background:var(--sky2);
+  box-shadow:0 20px 42px -12px var(--sky)}
+.btn.ghost{background:var(--card);color:var(--ink);border:1px solid var(--line)}
+.btn.ghost:hover{border-color:var(--sky2);color:var(--deep)}
+.btn[disabled]{background:var(--bg2);color:var(--ink3);box-shadow:none;cursor:default}
+
+/* ── секции, карточки ──────────────────────────────────────────────── */
+section{padding:54px 0}
+h2{margin:0 0 8px;font:800 clamp(25px,4vw,35px)/1.12 ui-sans-serif;letter-spacing:-.03em}
+h3{margin:0 0 6px;font:700 16px/1.25 ui-sans-serif;letter-spacing:-.01em}
+.sub{margin:0 0 26px;color:var(--ink2);max-width:62ch}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;
+  padding:22px;box-shadow:var(--shadow);transition:border-color .2s, transform .2s, box-shadow .2s}
+.card:hover{border-color:var(--sky3);transform:translateY(-3px);box-shadow:var(--shadow2)}
+.grid3{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(215px,1fr))}
+.stat b{display:block;font:800 32px/1 ui-monospace,monospace;color:var(--deep)}
+.stat span{font:600 12px/1.4 ui-sans-serif;letter-spacing:.06em;text-transform:uppercase;
+  color:var(--ink3)}
+
+/* ── семейства моделей ─────────────────────────────────────────────── */
+.fams{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(168px,1fr))}
+.fam{background:var(--card);border:1px solid var(--line);border-radius:14px;
+  padding:16px 18px;box-shadow:var(--shadow);position:relative;overflow:hidden;
+  transition:transform .2s, border-color .2s, box-shadow .2s}
+.fam:hover{transform:translateY(-3px);border-color:var(--sky3);box-shadow:var(--shadow2)}
+.fam::after{content:"";position:absolute;inset:auto -30% -60% -30%;height:120px;
+  background:radial-gradient(60% 100% at 50% 0%, rgba(255,255,255,.22), transparent 70%);
+  opacity:0;transition:opacity .25s}
+.fam:hover::after{opacity:1}
+.fam b{display:block;font:700 15.5px/1.2 ui-sans-serif;margin-bottom:3px}
+.fam i{font-style:normal;font:600 12px/1 ui-monospace,monospace;color:var(--ink3)}
+.fam u{display:block;margin-top:9px;text-decoration:none;font:600 12px/1 ui-sans-serif;
+  color:var(--deep)}
+
+/* ── демонстрация ──────────────────────────────────────────────────── */
+.demo{background:var(--card);border:1px solid var(--line);border-radius:16px;
+  overflow:hidden;box-shadow:var(--shadow)}
+.demo .bar{display:flex;align-items:center;gap:8px;padding:12px 15px;
+  border-bottom:1px solid var(--line);background:var(--bg2)}
+.demo .bar i{width:11px;height:11px;border-radius:50%;background:var(--line);display:block}
+.demo .bar span{margin-left:8px;font:600 12px/1 ui-monospace,monospace;color:var(--ink3)}
+.chat{padding:17px;min-height:215px;display:flex;flex-direction:column;gap:11px;
+  font:14.5px/1.55 ui-sans-serif}
+.msg{max-width:88%;padding:11px 15px;border-radius:14px;animation:pop .3s ease both}
+@keyframes pop{from{opacity:0;transform:translateY(8px) scale(.98)}}
+.msg.me{align-self:flex-end;background:var(--sky);color:#05060A;border-bottom-right-radius:5px}
+.msg.npc{align-self:flex-start;background:var(--bg2);border:1px solid var(--line);
+  border-bottom-left-radius:5px}
+.msg.sys{align-self:center;color:var(--ink3);font-size:13px;background:none;padding:2px}
+.typing i{display:inline-block;width:6px;height:6px;border-radius:50%;
+  background:var(--sky2);margin:0 2px;animation:blink 1.2s infinite}
+.typing i:nth-child(2){animation-delay:.2s}.typing i:nth-child(3){animation-delay:.4s}
+@keyframes blink{0%,80%,100%{opacity:.25}40%{opacity:1}}
+.ask{display:flex;gap:9px;padding:14px;border-top:1px solid var(--line);flex-wrap:wrap;
+  background:var(--bg2)}
+.ask select,.ask input{font:14.5px ui-sans-serif;padding:12px 14px;border-radius:10px;
+  border:1px solid var(--line);background:var(--card);color:var(--ink)}
+.ask input{flex:1;min-width:170px}
+.ask input:focus,.ask select:focus{outline:0;border-color:var(--sky2);
+  box-shadow:0 0 0 3px var(--sky4)}
+
+/* ── дашборд и таблицы ─────────────────────────────────────────────── */
+.meter{height:10px;border-radius:99px;background:var(--bg2);border:1px solid var(--line);
+  overflow:hidden;margin:11px 0 6px}
+.meter b{display:block;height:100%;border-radius:99px;
+  background:linear-gradient(90deg,var(--sky),var(--sky3));
+  transition:width .9s cubic-bezier(.2,.8,.2,1)}
+table{width:100%;border-collapse:collapse;font-size:14.5px;background:var(--card)}
+th{text-align:left;font:600 11px/1.3 ui-sans-serif;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--ink3);padding:11px 13px;
+  border-bottom:1px solid var(--line);background:var(--bg2)}
+td{padding:11px 13px;border-bottom:1px solid var(--line2)}
+tr:last-child td{border:0}
+td.num{font:600 13px ui-monospace,monospace;text-align:right;font-variant-numeric:tabular-nums}
+.wrapx{overflow-x:auto;border:1px solid var(--line);border-radius:14px;
+  box-shadow:var(--shadow)}
+.pill{display:inline-block;font:600 11.5px/1 ui-sans-serif;padding:6px 10px;
+  border-radius:99px;border:1px solid var(--line);color:var(--ink2);background:var(--card)}
+.pill.ok{color:var(--ok);border-color:rgba(15,157,88,.3);background:rgba(15,157,88,.07)}
+pre{background:#0D1017;color:#E8ECF2;border-radius:14px;padding:18px;overflow-x:auto;
+  font:13px/1.65 ui-monospace,monospace;margin:0;box-shadow:var(--shadow)}
+code{font:.92em ui-monospace,monospace}
+.out{font:13.5px/1.6 ui-monospace,monospace;white-space:pre-wrap;word-break:break-all;
+  border:1px solid var(--line);border-radius:12px;padding:14px;display:none;
+  background:var(--bg2)}
+.out.show{display:block}
+.out.ok{border-color:rgba(15,157,88,.4);background:rgba(15,157,88,.06);color:var(--ok)}
+.out.err{border-color:rgba(220,38,38,.35);background:rgba(220,38,38,.05);color:var(--bad)}
+footer{border-top:1px solid var(--line);margin-top:44px;padding:28px 0 64px;
+  color:var(--ink3);font-size:13.5px;background:var(--card)}
+a{color:var(--deep)}
+
+/* ── анимации, которых просили больше ──────────────────────────────── */
+/* Ступенчатое появление карточек: задержка задаётся переменной, поэтому
+   разметка остаётся чистой, а порядок читается сверху вниз. */
+.stagger>*{animation:rise .6s cubic-bezier(.2,.8,.2,1) both;
+  animation-delay:calc(var(--i,0)*70ms)}
+/* Счётчики: цифра «набегает» при появлении в поле зрения. */
+@property --num{syntax:"<integer>";initial-value:0;inherits:false}
+.count{animation:count 1.4s ease-out both;animation-timeline:view();
+  animation-range:entry 0% cover 22%;counter-reset:n var(--num)}
+.count::after{content:counter(n)}
+@keyframes count{from{--num:0}to{--num:var(--to)}}
+/* Подчёркивание, которое выезжает под ссылкой. */
+.ul{position:relative;text-decoration:none}
+.ul::after{content:"";position:absolute;left:0;right:100%;bottom:-3px;height:2px;
+  background:var(--sky);transition:right .28s cubic-bezier(.2,.8,.2,1)}
+.ul:hover::after{right:0}
+/* Мягкое парение — для главной карточки на странице «почему дёшево». */
+.float{animation:float 7s ease-in-out infinite}
+@keyframes float{50%{transform:translateY(-8px)}}
+/* Линия-соединитель в схеме «как это работает». */
+.flow{display:grid;gap:0;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));
+  position:relative}
+.flow .step{background:var(--card);border:1px solid var(--line);border-radius:14px;
+  padding:18px;box-shadow:var(--shadow);position:relative;z-index:1;margin:8px}
+.flow .step b{display:flex;align-items:center;gap:9px;font:700 15px/1.2 ui-sans-serif;
+  margin-bottom:6px}
+.flow .step em{font-style:normal;display:grid;place-items:center;width:26px;height:26px;
+  border-radius:50%;background:var(--sky4);color:var(--deep);
+  font:700 12px/1 ui-monospace,monospace;flex:none}
+.flow .step p{margin:0;color:var(--ink2);font-size:14px}
+.flow::before{content:"";position:absolute;left:6%;right:6%;top:50%;height:2px;
+  background:linear-gradient(90deg,transparent,var(--sky3),transparent);
+  animation:pulseline 3.4s ease-in-out infinite}
+@keyframes pulseline{50%{opacity:.35}}
+@media(max-width:760px){.flow::before{display:none}}
+/* Крупная цитата-довод. */
+.quote{font:700 clamp(20px,3.4vw,30px)/1.32 ui-sans-serif;letter-spacing:-.02em;
+  margin:0 0 12px;max-width:22ch}
+.split{display:grid;gap:26px;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+  align-items:center}
+.kv{display:grid;gap:9px}
+.kv div{display:flex;justify-content:space-between;gap:14px;padding:11px 0;
+  border-bottom:1px solid var(--line2)}
+.kv div:last-child{border:0}
+.kv span{color:var(--ink2)}
+.kv b{font:700 14px ui-monospace,monospace;white-space:nowrap}
+
+/* ══ ПРЕМИАЛЬНЫЙ СЛОЙ ═══════════════════════════════════════════════════
+   Три приёма, на которых держится ощущение дорогого, и ни один из них не
+   заметен по отдельности: зерно поверх плоских заливок, волосяная граница
+   с градиентом, и медленное уверенное движение вместо быстрого. */
+
+/* Зерно. Плоские цветные заливки на больших экранах выглядят «дёшево-цифровыми»;
+   едва различимый шум даёт им материальность. SVG вместо картинки — нет
+   лишнего запроса. */
+body::after{
+  background-image:
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='140' height='140'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/><feColorMatrix type='saturate' values='0'/></filter><rect width='140' height='140' filter='url(%23n)' opacity='.035'/></svg>"),
+    radial-gradient(58vw 46vw at 12% -8%, rgba(255,255,255,.30), transparent 62%),
+    radial-gradient(48vw 40vw at 92% 2%, rgba(255,255,255,.26), transparent 62%),
+    radial-gradient(70vw 34vw at 50% 104%, rgba(255,255,255,.10), transparent 66%);
+}
+
+/* Волосяная граница с градиентом. Обычный однотонный бордюр читается как
+   рамка; градиентный — как край материала. */
+.card, .fam, .demo, .wrapx, .step{
+  border:0; position:relative; background-clip:padding-box;
+}
+.card::before, .fam::before, .demo::before, .wrapx::before, .step::before{
+  content:""; position:absolute; inset:0; border-radius:inherit; padding:1px;
+  background:linear-gradient(160deg, rgba(255,255,255,.9), var(--line) 38%,
+             var(--line) 62%, rgba(255,255,255,.55));
+  -webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite:xor; mask-composite:exclude; pointer-events:none;
+  transition:background .35s var(--ease);
+}
+.card:hover::before, .fam:hover::before{
+  background:linear-gradient(160deg, rgba(255,255,255,.95), var(--sky3) 40%,
+             var(--sky2) 70%, var(--sky));
+}
+
+/* Движение медленнее и с «дорогим» замедлением. Быстрые переходы читаются
+   как отзывчивость интерфейса, медленные — как вес материала. */
+.card, .fam, .btn, nav a{transition:transform .38s var(--ease),
+  box-shadow .38s var(--ease), background .28s var(--ease), color .2s}
+.card:hover, .fam:hover{transform:translateY(-4px)}
+
+/* Типографика: крупнее контраст между заголовком и текстом, уже трекинг. */
+h1{letter-spacing:-.045em;line-height:.98}
+h2{letter-spacing:-.034em}
+.lead{font-size:clamp(17px,2.1vw,20.5px);line-height:1.55;color:var(--ink2)}
+.eyebrow{font:600 11.5px/1 ui-sans-serif;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--sky);margin:0 0 var(--s3)}
+section{padding:var(--s8) 0}
+.hero{padding:var(--s9) 0 var(--s7)}
+
+/* ── бургер ─────────────────────────────────────────────────────────── */
+.burger{display:block;margin-left:var(--s2);width:44px;height:44px;border-radius:12px;
+  border:1px solid var(--line);background:var(--glass);backdrop-filter:blur(10px);
+  cursor:pointer;position:relative}
+.burger i{position:absolute;left:12px;right:12px;height:2px;border-radius:2px;
+  background:var(--ink);transition:.4s var(--ease)}
+.burger i:nth-child(1){top:15px} .burger i:nth-child(2){top:21px}
+.burger i:nth-child(3){top:27px}
+#nav:checked~header .burger i:nth-child(1){transform:translateY(6px) rotate(45deg)}
+#nav:checked~header .burger i:nth-child(2){opacity:0;transform:scaleX(.2)}
+#nav:checked~header .burger i:nth-child(3){transform:translateY(-6px) rotate(-45deg)}
+.sheet{position:fixed;inset:0;z-index:30;visibility:hidden;opacity:0;
+  transition:.4s var(--ease)}
+.sheet .veil{position:absolute;inset:0;background:rgba(11,27,43,.34);
+  backdrop-filter:blur(6px)}
+.sheet .panel{position:absolute;top:0;right:0;bottom:0;width:min(86vw,340px);
+  background:var(--card);box-shadow:-30px 0 80px -40px rgba(11,27,43,.45);
+  padding:calc(62px + var(--s5)) var(--s5) var(--s5);display:flex;
+  flex-direction:column;gap:var(--s1);transform:translateX(102%);
+  transition:transform .46s var(--ease)}
+.sheet .panel a{font:700 17px/1 ui-sans-serif;letter-spacing:-.015em;color:var(--ink);
+  text-decoration:none;padding:16px 14px;border-radius:12px;
+  display:flex;align-items:center;justify-content:space-between}
+.sheet .panel a:hover{background:var(--sky4);color:var(--deep)}
+.sheet .panel a span{color:var(--ink3);font:600 12px/1 ui-monospace,monospace}
+#nav:checked~.sheet{visibility:visible;opacity:1}
+#nav:checked~.sheet .panel{transform:none}
+#nav{position:absolute;opacity:0;pointer-events:none}
+nav{margin-left:auto}
+@media(max-width:760px){nav{display:none}}
+
+/* Полоса цифр под первым экраном. Разделители — псевдоэлементы, а не рамки:
+   так они не появляются лишними на переносе строки. */
+.strip{display:flex;flex-wrap:wrap;justify-content:center;gap:0;margin-top:var(--s7);
+  border-top:1px solid var(--line);padding-top:var(--s5)}
+.strip div{padding:0 clamp(14px,3vw,34px);position:relative;text-align:center}
+.strip div+div::before{content:"";position:absolute;left:0;top:14%;bottom:14%;
+  width:1px;background:var(--line)}
+.strip b{display:block;font:800 clamp(20px,3vw,27px)/1 ui-monospace,monospace;
+  color:var(--ink);letter-spacing:-.02em}
+.strip span{display:block;margin-top:6px;font:600 11.5px/1.3 ui-sans-serif;
+  letter-spacing:.09em;text-transform:uppercase;color:var(--ink3)}
+</style></head><body>
+<input type="checkbox" id="nav" aria-label="menu">
+<header><div class="wrap">
+  <a class="logo" href="./"><span class="dot"></span>Cortex</a>
+  <nav>
+    <a href="https://discord.gg/7QdMqAY5UB" target="_blank" rel="noopener">Discord</a>
+    <a href="https://osa-api.netlify.app/">Русский</a>
+    <a class="cta" href="#pricing">Pricing</a>
+  </nav>
+</div></header>
+
+<div class="hero wrap">
+  <div class="badge"><span class="dot"></span> pay in Robux, no card</div>
+  <h1>AI in your<br><span class="grad">Roblox game</span></h1>
+  <p class="lead">One request from a server Script and your game runs a neural net:
+  NPCs reply in their own words, quests and descriptions generate themselves, chat
+  is moderated by meaning. No backend, no VPN, no card.</p>
+  <div class="row">
+    <a class="btn primary" href="#demo">Try it right here →</a>
+    <a class="btn ghost" href="#connect">How it works</a>
+  </div>
+  <div class="strip">
+    <div><b>48</b><span>models</span></div>
+    <div><b>1762 ms</b><span>typical reply</span></div>
+    <div><b>68%</b><span>free from cache</span></div>
+    <div><b>0 ₽</b><span>to start</span></div>
+  </div>
+</div>
+
+<section class="wrap rise" id="demo">
+  <h2>Try it, don't trust me</h2>
+  <p class="sub">Not a recording — the same model that will run in your game answers.
+  The blacksmith is just an example; item descriptions and anything else work the same.</p>
+  <div class="demo">
+    <div class="bar"><i></i><i></i><i></i><span>village · square</span></div>
+    <div class="chat" id="chat">
+      <div class="msg sys">Pick a character and say something</div>
+    </div>
+    <div class="ask">
+      <select id="who"><option value="кузнец">Blacksmith</option><option value="стражник">Guard</option><option value="торговка">Merchant</option><option value="жрец">Priest</option></select>
+      <input id="say" placeholder="give me a free sword" maxlength="120" autocomplete="off">
+      <button class="btn primary" id="send">Send</button>
+    </div>
+  </div>
+</section>
+
+<section class="wrap rise">
+  <h2>What it's for</h2>
+  <div class="grid3 stagger">
+    <div class="card" style="--i:0"><h3>Living NPC dialogue</h3>
+      <p class="sub" style="margin:0;font-size:14.5px">NPCs answer what the player
+      actually typed, not a line pulled from a table.</p></div>
+    <div class="card" style="--i:1"><h3>Descriptions &amp; lore</h3>
+      <p class="sub" style="margin:0;font-size:14.5px">Items, quests, notes —
+      generated once at world-gen and then served from cache.</p></div>
+    <div class="card" style="--i:2"><h3>Chat moderation</h3>
+      <p class="sub" style="margin:0;font-size:14.5px">By meaning, not a word list —
+      no false flags on harmless phrases.</p></div>
+    <div class="card" style="--i:3"><h3>Player hints</h3>
+      <p class="sub" style="margin:0;font-size:14.5px">Explain a mechanic in words
+      that fit this exact situation.</p></div>
+    <div class="card" style="--i:4"><h3>Quest generation</h3>
+      <p class="sub" style="margin:0;font-size:14.5px">A quest tuned to the player's
+      level and story, not the fifth copy of the same one.</p></div>
+    <div class="card" style="--i:5"><h3>Whatever you build</h3>
+      <p class="sub" style="margin:0;font-size:14.5px">It's a plain API — limited by
+      your idea, not our list of scenarios.</p></div>
+  </div>
+</section>
+
+<section class="wrap rise" id="connect">
+  <h2>Plug it in</h2>
+  <p class="sub">Permanent address — you won't have to migrate after us.</p>
+  <pre><code id="lua">…</code></pre>
+  <p class="sub" style="margin-top:14px">
+  Turn on <b>Game Settings → Security → Allow HTTP Requests</b>, and use a
+  <b>server Script</b> — Roblox blocks HTTP from a LocalScript.</p>
+</section>
+
+<section class="wrap rise" id="pricing">
+  <h2>Pricing</h2>
+  <p class="sub">A unit = 1000 output tokens, ~15 NPC lines. Repeats from cache are free.
+  Pay in Robux via a game pass — get your key in the Discord.</p>
+  <div class="grid3">
+      <div class="card">
+        <h3 style="margin:0 0 4px;font:700 16px/1.2 ui-sans-serif">Trial</h3>
+        <div class="stat"><b>199</b><span>robux</span></div>
+        <p class="sub" style="margin:10px 0 4px;font-size:14px">
+          4,975 units · ~108 hours of play</p>
+        <button class="btn primary" disabled
+                style="width:100%;justify-content:center;margin-top:8px">
+          Get it in Discord</button>
+      </div>
+      <div class="card">
+        <h3 style="margin:0 0 4px;font:700 16px/1.2 ui-sans-serif">Start</h3>
+        <div class="stat"><b>299</b><span>robux</span></div>
+        <p class="sub" style="margin:10px 0 4px;font-size:14px">
+          7,475 units · ~162 hours of play</p>
+        <button class="btn primary" disabled
+                style="width:100%;justify-content:center;margin-top:8px">
+          Get it in Discord</button>
+      </div>
+      <div class="card">
+        <h3 style="margin:0 0 4px;font:700 16px/1.2 ui-sans-serif">Game</h3>
+        <div class="stat"><b>499</b><span>robux</span></div>
+        <p class="sub" style="margin:10px 0 4px;font-size:14px">
+          12,475 units · ~271 hours of play</p>
+        <button class="btn primary" disabled
+                style="width:100%;justify-content:center;margin-top:8px">
+          Get it in Discord</button>
+      </div>
+      <div class="card">
+        <h3 style="margin:0 0 4px;font:700 16px/1.2 ui-sans-serif">Studio</h3>
+        <div class="stat"><b>1,499</b><span>robux</span></div>
+        <p class="sub" style="margin:10px 0 4px;font-size:14px">
+          37,475 units · ~815 hours of play</p>
+        <button class="btn primary" disabled
+                style="width:100%;justify-content:center;margin-top:8px">
+          Get it in Discord</button>
+      </div></div>
+  <div class="row" style="margin-top:22px">
+    <a class="btn primary" href="https://discord.gg/7QdMqAY5UB" target="_blank" rel="noopener">Join Discord →</a>
+  </div>
+</section>
+
+<footer><div class="wrap">
+  Pay in Robux. Leave whenever you want — we speak the OpenAI protocol, only the
+  address and key change.<br>
+  Questions and support in <a href="https://discord.gg/7QdMqAY5UB" target="_blank" rel="noopener">Discord</a>.
+</div></footer>
+
+<script>
+const chat = document.getElementById("chat");
+function add(cls, text){
+  const d = document.createElement("div");
+  d.className = "msg " + cls; d.textContent = text;
+  chat.appendChild(d); chat.scrollTop = chat.scrollHeight; return d;
+}
+async function talk(){
+  const text = document.getElementById("say").value.trim();
+  if(!text) return;
+  const who = document.getElementById("who").value;
+  document.getElementById("say").value = "";
+  add("me", text);
+  const wait = add("npc", ""); wait.className = "msg npc typing";
+  wait.innerHTML = "<i></i><i></i><i></i>";
+  try{
+    const r = await fetch("https://osa-api.netlify.app/shop/demo", {method:"POST",
+      headers:{"content-type":"application/json"},
+      body: JSON.stringify({who, text})});
+    const j = await r.json();
+    wait.className = "msg npc";
+    wait.textContent = j.text || j.error || "silent";
+  }catch(e){ wait.className = "msg npc"; wait.textContent = "couldn't reach it"; }
+}
+document.getElementById("send").onclick = talk;
+document.getElementById("say").addEventListener("keydown", e => { if(e.key === "Enter") talk(); });
+fetch("https://osa-api.netlify.app/shop/lua").then(r => r.text()).then(t => { document.getElementById("lua").textContent = t; });
+</script></body></html>
