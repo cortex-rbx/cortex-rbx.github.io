@@ -1,11 +1,9 @@
 <!doctype html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="dark">
-<title>AI NPCs in Roblox — talking characters in one request</title>
-<meta name="description" content="Static dialogue trees get old fast. With Cortex your NPCs reply in character to whatever the player actually types — no giant tables, no branching mess.">
+<title>AI NPCs in Roblox — talking characters in one request</title><meta name="description" content="Static dialogue trees get old fast. With Cortex your NPCs reply in character to whatever the player actually types — no giant tables, no branching mess.">
 <meta property="og:type" content="article"><meta property="og:title" content="AI NPCs in Roblox — talking characters in one request">
 <meta property="og:description" content="Static dialogue trees get old fast. With Cortex your NPCs reply in character to whatever the player actually types — no giant tables, no branching mess."><meta property="og:image" content="https://cortex-rbx.github.io/og.png">
-<meta name="twitter:card" content="summary_large_image">
-<link rel="canonical" href="https://cortex-rbx.github.io/roblox-ai-npc">
+<meta name="twitter:card" content="summary_large_image"><link rel="canonical" href="https://cortex-rbx.github.io/roblox-ai-npc">
 <style>
 body{margin:0;background:#05060A;color:#F4F7FB;font:16px/1.65 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;padding:32px 20px;max-width:720px;margin:0 auto}
 a{color:#F4F7FB} h1{font-size:30px;line-height:1.2;margin:6px 0 14px} h2{font-size:20px;margin:28px 0 8px}
@@ -13,10 +11,10 @@ a{color:#F4F7FB} h1{font-size:30px;line-height:1.2;margin:6px 0 14px} h2{font-si
 .cta{display:inline-block;margin:8px 10px 0 0;padding:11px 16px;border-radius:10px;font-weight:600;text-decoration:none}
 .p{background:#F4F7FB;color:#05060A} .g{border:1px solid #1C2030}
 .reward{background:#0C0E14;border:1px solid #1C2030;border-radius:12px;padding:14px;margin:22px 0}
+.f{margin-top:28px;font-size:13px;line-height:2}
 </style></head><body>
-<p class="dim"><a href="https://cortex-rbx.github.io">Cortex</a> · AI for your Roblox game</p>
-<h1>How to add AI NPCs to a Roblox game</h1>
-<p>Static dialogue trees get old fast. With Cortex your NPCs reply in character to whatever the player actually types — no giant tables, no branching mess.</p>
+<p class="dim"><a href="https://cortex-rbx.github.io">Cortex</a> · AI for your Roblox game · <a href="/guides">all guides</a></p>
+<h1>How to add AI NPCs to a Roblox game</h1><p>Static dialogue trees get old fast. With Cortex your NPCs reply in character to whatever the player actually types — no giant tables, no branching mess.</p>
 <h2>One server-side request</h2>
 <p class="dim">Put a ModuleScript in ServerStorage and call it from a <b>server</b> Script — your key never touches the client.</p>
 <pre>local Cortex = require(game.ServerStorage.Cortex)
@@ -26,12 +24,11 @@ print(ai:ask(
   "You are a gruff dwarven blacksmith. One short in-character line.",
   "Can you forge me a sword?"
 ))</pre>
-<p>That's it — ~3 seconds, and you <b>pay in Robux</b> via a game pass. No cards, no backend.</p>
-<div class="reward">🎁 <b>Open beta — free keys for the first devs.</b> Founding testers keep a permanent
-founder discount when it goes paid, plus a Robux reward + your game featured if you ship it in a live game and share feedback.</div>
+<p>~3 seconds, and you <b>pay in Robux</b> via a game pass. No cards, no backend.</p>
+<div class="reward">🎁 <b>Open beta — free keys for the first devs.</b> Founding testers keep a permanent founder discount when it goes paid, plus a Robux reward + your game featured for shipping it in a live game with feedback.</div>
 <h2>Get started</h2>
 <a class="cta p" href="https://discord.gg/A3MSqwkvn7">Get a free beta key →</a>
 <a class="cta g" href="https://github.com/cortex-rbx/roblox-ai-kit">Free kit on GitHub</a>
 <a class="cta g" href="https://cortex-rbx.github.io">Live demo</a>
-<p class="dim" style="margin-top:26px">More: <a href="/roblox-ai-npc">AI NPCs</a> · <a href="/roblox-ai-chatbot">AI chatbot</a> · <a href="/roblox-chat-moderation">chat moderation</a> · <a href="/roblox-ai-quests">AI quests</a></p>
+<p class="f dim">More guides: <a href="/roblox-ai-npc">ai npc</a> · <a href="/roblox-ai-chatbot">ai chatbot</a> · <a href="/roblox-chat-moderation">chat moderation</a> · <a href="/roblox-ai-quests">ai quests</a> · <a href="/roblox-ai-companion">ai companion</a> · <a href="/roblox-ai-shopkeeper">ai shopkeeper</a> · <a href="/roblox-dynamic-dialogue">dynamic dialogue</a> · <a href="/roblox-ai-dungeon-master">ai dungeon master</a> · <a href="/roblox-ai-lore-generator">ai lore generator</a> · <a href="/roblox-smart-enemies">smart enemies</a> · <a href="/roblox-ai-tutorial-npc">ai tutorial npc</a> · <a href="/roblox-ai-story-generator">ai story generator</a></p>
 </body></html>
