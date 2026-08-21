@@ -1,0 +1,37 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="dark">
+<title>AI-generated quests in Roblox — adaptive missions</title>
+<meta name="description" content="Stop shipping the same five quests. Cortex writes missions tuned to the player's level and story on the fly, so content never runs dry.">
+<meta property="og:type" content="article"><meta property="og:title" content="AI-generated quests in Roblox — adaptive missions">
+<meta property="og:description" content="Stop shipping the same five quests. Cortex writes missions tuned to the player's level and story on the fly, so content never runs dry."><meta property="og:image" content="https://cortex-rbx.github.io/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="canonical" href="https://cortex-rbx.github.io/roblox-ai-quests">
+<style>
+body{margin:0;background:#05060A;color:#F4F7FB;font:16px/1.65 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;padding:32px 20px;max-width:720px;margin:0 auto}
+a{color:#F4F7FB} h1{font-size:30px;line-height:1.2;margin:6px 0 14px} h2{font-size:20px;margin:28px 0 8px}
+.dim{color:#8A93A6} pre{background:#0C0E14;border:1px solid #1C2030;border-radius:12px;padding:14px;overflow:auto;font:13px/1.5 ui-monospace,monospace}
+.cta{display:inline-block;margin:8px 10px 0 0;padding:11px 16px;border-radius:10px;font-weight:600;text-decoration:none}
+.p{background:#F4F7FB;color:#05060A} .g{border:1px solid #1C2030}
+.reward{background:#0C0E14;border:1px solid #1C2030;border-radius:12px;padding:14px;margin:22px 0}
+</style></head><body>
+<p class="dim"><a href="https://cortex-rbx.github.io">Cortex</a> · AI for your Roblox game</p>
+<h1>How to generate quests with AI in Roblox</h1>
+<p>Stop shipping the same five quests. Cortex writes missions tuned to the player's level and story on the fly, so content never runs dry.</p>
+<h2>One server-side request</h2>
+<p class="dim">Put a ModuleScript in ServerStorage and call it from a <b>server</b> Script — your key never touches the client.</p>
+<pre>local Cortex = require(game.ServerStorage.Cortex)
+local ai = Cortex.new("YOUR_KEY")
+
+print(ai:ask(
+  "You are a quest-giver. Give ONE short quest, 1 sentence.",
+  "player is level 6 and loves exploring caves"
+))</pre>
+<p>That's it — ~3 seconds, and you <b>pay in Robux</b> via a game pass. No cards, no backend.</p>
+<div class="reward">🎁 <b>Open beta — free keys for the first devs.</b> Founding testers keep a permanent
+founder discount when it goes paid, plus a Robux reward + your game featured if you ship it in a live game and share feedback.</div>
+<h2>Get started</h2>
+<a class="cta p" href="https://discord.gg/A3MSqwkvn7">Get a free beta key →</a>
+<a class="cta g" href="https://github.com/cortex-rbx/roblox-ai-kit">Free kit on GitHub</a>
+<a class="cta g" href="https://cortex-rbx.github.io">Live demo</a>
+<p class="dim" style="margin-top:26px">More: <a href="/roblox-ai-npc">AI NPCs</a> · <a href="/roblox-ai-chatbot">AI chatbot</a> · <a href="/roblox-chat-moderation">chat moderation</a> · <a href="/roblox-ai-quests">AI quests</a></p>
+</body></html>
