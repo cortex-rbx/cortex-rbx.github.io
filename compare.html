@@ -11,7 +11,7 @@
 {"@type":"Question","name":"Which AI models can I use in a Roblox game?","acceptedAnswer":{"@type":"Answer","text":"Roblox's native Text Generation API uses basic open-source models. Third-party services expose stronger frontier models (GPT-5, Claude, Gemini class). Cortex serves frontier-class models through one server-side request and pays for them from its own pooled access, so you get strong models without a per-call markup or bringing your own paid key."}},
 {"@type":"Question","name":"Do I need a credit card to add AI to a Roblox game?","acceptedAnswer":{"@type":"Answer","text":"Not with Cortex — you pay in Robux via a game pass, no credit card. Some competing services bill in USD or hide their pricing entirely. Roblox's native API is free but limited to basic models."}},
 {"@type":"Question","name":"What are the alternatives for adding AI to Roblox, and how do they differ?","acceptedAnswer":{"@type":"Answer","text":"There are four broad options. (1) Roblox's native Text Generation API: free, native, but basic open-source models and platform limits. (2) Hosted per-token wrappers: resell frontier models over an OpenAI-compatible endpoint, but per-token pricing gets costly and some require you to bring your own paid key for the best models. (3) NPC agent platforms: full no-code character systems, but narrow to NPCs and often have opaque USD pricing. (4) Cortex: one server-side request for anything text-shaped (NPCs, quests, items, lore, moderation), frontier-class models, key never touches the client, pay in Robux, transparent pricing that undercuts resellers."}},
-{"@type":"Question","name":"Is a per-token AI reseller expensive for a Roblox game?","acceptedAnswer":{"@type":"Answer","text":"It can be. Per-token resellers charge a marked-up rate on every input and output token, so a game with hundreds of thousands of NPC replies can run into a very large Robux bill. Cortex is built to serve the same frontier-class models at a fraction of that, because it runs its own pooled model access instead of reselling another provider per token."}}
+{"@type":"Question","name":"Is a per-token AI reseller expensive for a Roblox game?","acceptedAnswer":{"@type":"Answer","text":"It can be. Per-token resellers charge a marked-up rate on every input and output token — including the system prompt, memory and chat history an NPC resends on every call — and frontier models cost far more per token than cheap ones, so a game with hundreds of thousands of NPC replies can run into a very large Robux bill. Cortex prices differently: it bills output tokens only (context is free, repeats are cached free) at a flat rate of about 25,000 output tokens per Robux for any model, frontier included, because it runs its own pooled model access instead of reselling per token. That is often 100x+ cheaper for the same frontier-quality volume."}}
 ]}
 </script>
 <script type="application/ld+json">
@@ -56,9 +56,14 @@ col.cxcol{}
 <td class="cx"><span class="win">Frontier-class</span> (GPT-5 / Claude class), included</td></tr>
 <tr><th>Pricing</th>
 <td>Free</td>
-<td>Per-token markup — climbs fast at scale</td>
+<td>Per-token markup, input + output, ×model — climbs fast at scale</td>
 <td>Often USD or undisclosed</td>
-<td class="cx"><span class="win">Transparent, undercuts resellers</span></td></tr>
+<td class="cx"><span class="win">Output tokens only · flat across models</span> — ~25,000 output tokens per Robux</td></tr>
+<tr><th>Input / context</th>
+<td>Native</td>
+<td>Billed every call (prompt + memory + history)</td>
+<td>Varies</td>
+<td class="cx"><span class="win">Free</span> — you only pay for output; repeats are cached free</td></tr>
 <tr><th>Payment</th>
 <td>Native / free</td>
 <td>Robux or USD</td>
@@ -85,7 +90,12 @@ col.cxcol{}
 <p class="dim">Categories, not callouts — every option here is a legitimate choice for some team. This is just where Cortex fits.</p>
 
 <h2>Why Cortex comes out cheaper</h2>
-<p>Most third-party AI for Roblox is a <b>reseller</b>: it buys frontier models from OpenAI or Anthropic and charges you a marked-up rate on every token. That's why a game with a few hundred thousand NPC replies can quietly rack up a huge Robux bill. Cortex runs its <b>own pooled model access</b> instead of reselling per token — so it serves the same frontier-class models at a fraction of the per-reply cost, and passes that down to you.</p>
+<p>Most third-party AI for Roblox is a <b>reseller</b>: it buys frontier models from OpenAI or Anthropic and charges you a marked-up rate on every token. That's why a game with a few hundred thousand NPC replies can quietly rack up a huge Robux bill. Cortex runs its <b>own pooled model access</b> instead of reselling per token — and that lets it price on a different, much cheaper basis. Two structural reasons:</p>
+<ul>
+<li><b>You pay for output only.</b> A reseller bills every token — including the system prompt, memory and chat history your NPC resends on <i>every single call</i>. Cortex bills the <b>output only</b>; the context you send is free, and repeated calls are served from cache for nothing.</li>
+<li><b>Flat rate across models.</b> On a reseller a frontier reply can cost 50–100× a cheap one. On Cortex every model bills at the same rate — <b>~25,000 output tokens per Robux</b> — because the pool absorbs the model-cost difference. Frontier quality, cheap-model price.</li>
+</ul>
+<p>In practice: the <b>499&nbsp;R$</b> package is 12,475 units = <b>~187,000 NPC lines</b>. The same volume of frontier-quality replies on a per-token reseller runs into the <b>hundreds of thousands of Robux</b> — often 100×+ more — once you count the context billed on every call.</p>
 
 <h2>Why not just use Roblox's native API?</h2>
 <p>It's free and it's native — great for basic, low-stakes text. But it runs <b>basic open-source models</b>, so the writing is weaker and the range is narrower. The trade is simple: Roblox native gives you <b>free-but-basic</b>; Cortex gives you <b>frontier-but-cheap</b>. If your NPCs, quests or moderation need to actually feel smart, that gap shows up fast.</p>
