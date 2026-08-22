@@ -18,7 +18,7 @@
 ]}
 </script>
 <style>body{margin:0;background:#05060A;color:#F4F7FB;font:16px/1.65 system-ui;padding:32px 20px;max-width:720px;margin:0 auto}a{color:#F4F7FB}h1{font-size:28px}h2{font-size:19px;margin:26px 0 6px}.dim{color:#8A93A6}</style></head><body>
-<p class="dim"><a href="https://cortex-rbx.github.io">Cortex</a> · AI for your Roblox game · <a href="/guides">guides</a></p>
+<p class="dim"><a href="https://cortex-rbx.github.io">Cortex</a> · AI for your Roblox game · <a href="/guides">guides</a> · <a href="/compare">compare</a></p>
 <h1>Cortex FAQ</h1>
 <h2>How do I add AI NPCs to my Roblox game?</h2><p>One HTTP request from a <b>server</b> Script feeds an AI reply to your NPC. Cortex does it in one call — <code>ai:ask(personality, playerMessage)</code> — with the key kept server-side. Free during beta, pay in Robux. Kit: <a href="https://github.com/cortex-rbx/roblox-ai-kit">github.com/cortex-rbx/roblox-ai-kit</a>.</p>
 <h2>How do I add an AI chatbot to a Roblox game?</h2><p>Send the player's message from a server Script and return the reply: <code>ai:ask("You are a helpful in-game guide", message)</code>. No backend to host.</p>
@@ -26,4 +26,5 @@
 <h2>Generate quests / item text / lore with AI?</h2><p>Same one-request pattern with a prompt like "give one short quest" or "write an item description". Cache world-gen output.</p>
 <h2>AI chat moderation?</h2><p>Ask the model to classify by meaning (reply SAFE or BLOCK) from a server Script — catches intent word-lists miss.</p>
 <h2>Is there an AI API for Roblox devs, and cost?</h2><p>Yes — Cortex. Free during open beta, then pay in Robux (no card). <a href="https://discord.gg/A3MSqwkvn7">Get a beta key</a>.</p>
+<h2>How does Cortex compare to other Roblox AI options?</h2><p>Against Roblox's native API (free but basic models), hosted per-token wrappers (frontier models but marked-up per token), and NPC platforms (narrow + often USD): Cortex serves frontier-class models at a fraction of reseller cost, key stays server-side, pay in Robux. Full breakdown → <a href="/compare">AI for Roblox, compared</a>.</p>
 </body></html>

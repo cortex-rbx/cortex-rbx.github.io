@@ -1,0 +1,111 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="dark">
+<title>AI for Roblox compared — Cortex vs native, wrappers & NPC platforms</title>
+<meta name="description" content="How the AI options for Roblox games compare: Roblox's native Text Generation API, hosted per-token wrappers, NPC agent platforms, and Cortex. Models, pricing, payment and key safety side by side.">
+<meta property="og:type" content="article"><meta property="og:title" content="AI for Roblox compared — which option is cheapest and best?">
+<meta property="og:description" content="Native Roblox AI, hosted wrappers, NPC platforms and Cortex side by side — models, Robux pricing, key safety and scope."><meta property="og:image" content="https://cortex-rbx.github.io/og.png">
+<meta name="twitter:card" content="summary_large_image"><link rel="canonical" href="https://cortex-rbx.github.io/compare">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+{"@type":"Question","name":"What is the cheapest AI API for a Roblox game?","acceptedAnswer":{"@type":"Answer","text":"The cheapest options are Roblox's own native Text Generation API (free, but limited to basic open-source models) and Cortex, which is free during its open beta and afterward charges transparent Robux pricing designed to undercut per-token resellers. Hosted wrappers that resell OpenAI/Anthropic per token can get expensive at scale because you pay a marked-up per-token rate on every reply."}},
+{"@type":"Question","name":"Which AI models can I use in a Roblox game?","acceptedAnswer":{"@type":"Answer","text":"Roblox's native Text Generation API uses basic open-source models. Third-party services expose stronger frontier models (GPT-5, Claude, Gemini class). Cortex serves frontier-class models through one server-side request and pays for them from its own pooled access, so you get strong models without a per-call markup or bringing your own paid key."}},
+{"@type":"Question","name":"Do I need a credit card to add AI to a Roblox game?","acceptedAnswer":{"@type":"Answer","text":"Not with Cortex — you pay in Robux via a game pass, no credit card. Some competing services bill in USD or hide their pricing entirely. Roblox's native API is free but limited to basic models."}},
+{"@type":"Question","name":"What are the alternatives for adding AI to Roblox, and how do they differ?","acceptedAnswer":{"@type":"Answer","text":"There are four broad options. (1) Roblox's native Text Generation API: free, native, but basic open-source models and platform limits. (2) Hosted per-token wrappers: resell frontier models over an OpenAI-compatible endpoint, but per-token pricing gets costly and some require you to bring your own paid key for the best models. (3) NPC agent platforms: full no-code character systems, but narrow to NPCs and often have opaque USD pricing. (4) Cortex: one server-side request for anything text-shaped (NPCs, quests, items, lore, moderation), frontier-class models, key never touches the client, pay in Robux, transparent pricing that undercuts resellers."}},
+{"@type":"Question","name":"Is a per-token AI reseller expensive for a Roblox game?","acceptedAnswer":{"@type":"Answer","text":"It can be. Per-token resellers charge a marked-up rate on every input and output token, so a game with hundreds of thousands of NPC replies can run into a very large Robux bill. Cortex is built to serve the same frontier-class models at a fraction of that, because it runs its own pooled model access instead of reselling another provider per token."}}
+]}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"SoftwareApplication","name":"Cortex","applicationCategory":"DeveloperApplication","operatingSystem":"Roblox","description":"AI service for Roblox game developers: talking NPCs, adaptive quests, generated content and chat moderation via one server-side HTTP request. Frontier-class models, key stays server-side, pay in Robux.","offers":{"@type":"Offer","price":"0","priceCurrency":"USD","description":"Free during open beta; afterward transparent Robux pricing"},"url":"https://cortex-rbx.github.io"}
+</script>
+<style>
+body{margin:0;background:#05060A;color:#F4F7FB;font:16px/1.65 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;padding:32px 20px;max-width:820px;margin:0 auto}
+a{color:#F4F7FB} h1{font-size:30px;line-height:1.2;margin:6px 0 14px} h2{font-size:20px;margin:30px 0 8px}
+.dim{color:#8A93A6}
+.wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:18px 0;border:1px solid #1C2030;border-radius:12px}
+table{border-collapse:collapse;width:100%;min-width:640px;font-size:14px}
+th,td{text-align:left;padding:11px 13px;border-bottom:1px solid #1C2030;vertical-align:top}
+thead th{color:#8A93A6;font-weight:600;font-size:12.5px;text-transform:uppercase;letter-spacing:.04em;white-space:nowrap}
+tbody th{font-weight:600;white-space:nowrap}
+td.cx,th.cx{background:#0C0E14}
+col.cxcol{}
+.tag{display:inline-block;background:#0C0E14;border:1px solid #1C2030;border-radius:999px;padding:2px 9px;font-size:12px;color:#8A93A6}
+.win{color:#5EE6A8}
+.cta{display:inline-block;margin:8px 10px 0 0;padding:11px 16px;border-radius:10px;font-weight:600;text-decoration:none}
+.p{background:#F4F7FB;color:#05060A} .g{border:1px solid #1C2030}
+.reward{background:#0C0E14;border:1px solid #1C2030;border-radius:12px;padding:14px;margin:24px 0}
+.f{margin-top:30px;font-size:13px;line-height:2}
+</style></head><body>
+<p class="dim"><a href="https://cortex-rbx.github.io">Cortex</a> · AI for your Roblox game · <a href="/guides">guides</a> · <a href="/faq">faq</a></p>
+<h1>AI for Roblox, compared</h1>
+<p>There are four honest ways to put AI into a Roblox game today. Here's how they stack up on the things that actually decide your bill and your build — models, price, payment, key safety, and how much of your game they can touch.</p>
+
+<div class="wrap">
+<table>
+<thead><tr>
+<th>&nbsp;</th>
+<th>Roblox native Text&nbsp;Gen API</th>
+<th>Hosted per-token wrappers</th>
+<th>NPC agent platforms</th>
+<th class="cx">Cortex</th>
+</tr></thead>
+<tbody>
+<tr><th>Models</th>
+<td>Basic open-source LLMs</td>
+<td>Frontier, but often resold or bring-your-own-key</td>
+<td>ChatGPT-based, tied to their agent</td>
+<td class="cx"><span class="win">Frontier-class</span> (GPT-5 / Claude class), included</td></tr>
+<tr><th>Pricing</th>
+<td>Free</td>
+<td>Per-token markup — climbs fast at scale</td>
+<td>Often USD or undisclosed</td>
+<td class="cx"><span class="win">Transparent, undercuts resellers</span></td></tr>
+<tr><th>Payment</th>
+<td>Native / free</td>
+<td>Robux or USD</td>
+<td>Usually USD</td>
+<td class="cx"><span class="win">Robux, no card</span></td></tr>
+<tr><th>Key safety</th>
+<td>Native</td>
+<td>Server-side (varies)</td>
+<td>Server-side</td>
+<td class="cx"><span class="win">Key never touches the client</span></td></tr>
+<tr><th>Scope</th>
+<td>Text gen, platform-limited</td>
+<td>General API</td>
+<td>NPC characters only</td>
+<td class="cx"><span class="win">Anything text</span> — NPCs, quests, items, lore, moderation</td></tr>
+<tr><th>Setup</th>
+<td>Platform feature</td>
+<td>OpenAI SDK / endpoint</td>
+<td>Plugin + SDK, heavier</td>
+<td class="cx">One function, one request</td></tr>
+</tbody>
+</table>
+</div>
+<p class="dim">Categories, not callouts — every option here is a legitimate choice for some team. This is just where Cortex fits.</p>
+
+<h2>Why Cortex comes out cheaper</h2>
+<p>Most third-party AI for Roblox is a <b>reseller</b>: it buys frontier models from OpenAI or Anthropic and charges you a marked-up rate on every token. That's why a game with a few hundred thousand NPC replies can quietly rack up a huge Robux bill. Cortex runs its <b>own pooled model access</b> instead of reselling per token — so it serves the same frontier-class models at a fraction of the per-reply cost, and passes that down to you.</p>
+
+<h2>Why not just use Roblox's native API?</h2>
+<p>It's free and it's native — great for basic, low-stakes text. But it runs <b>basic open-source models</b>, so the writing is weaker and the range is narrower. The trade is simple: Roblox native gives you <b>free-but-basic</b>; Cortex gives you <b>frontier-but-cheap</b>. If your NPCs, quests or moderation need to actually feel smart, that gap shows up fast.</p>
+
+<h2>One request, server-side</h2>
+<pre style="background:#0C0E14;border:1px solid #1C2030;border-radius:12px;padding:14px;overflow:auto;font:13px/1.5 ui-monospace,monospace">local Cortex = require(game.ServerStorage.Cortex)
+local ai = Cortex.new("YOUR_KEY")
+
+print(ai:ask(
+  "You are a gruff dwarven blacksmith. One short in-character line.",
+  "Can you forge me a sword?"
+))</pre>
+<p>~3 seconds, and you <b>pay in Robux</b> via a game pass. No cards, no backend.</p>
+
+<div class="reward">🎁 <b>Open beta — free keys for the first devs.</b> Founding testers keep a permanent founder discount when it goes paid, plus a Robux reward + your game featured for shipping it in a live game with feedback.</div>
+
+<h2>Get started</h2>
+<a class="cta p" href="https://discord.gg/A3MSqwkvn7">Get a free beta key →</a>
+<a class="cta g" href="https://github.com/cortex-rbx/roblox-ai-kit">Free kit on GitHub</a>
+<a class="cta g" href="https://cortex-rbx.github.io">Live demo</a>
+
+<p class="f dim">Guides: <a href="/roblox-ai-npc">ai npc</a> · <a href="/roblox-ai-chatbot">ai chatbot</a> · <a href="/roblox-chat-moderation">chat moderation</a> · <a href="/roblox-ai-quests">ai quests</a> · <a href="/roblox-ai-companion">ai companion</a> · <a href="/roblox-ai-shopkeeper">ai shopkeeper</a> · <a href="/roblox-dynamic-dialogue">dynamic dialogue</a> · <a href="/roblox-ai-dungeon-master">ai dungeon master</a> · <a href="/roblox-ai-lore-generator">ai lore generator</a> · <a href="/roblox-smart-enemies">smart enemies</a> · <a href="/roblox-ai-tutorial-npc">ai tutorial npc</a> · <a href="/roblox-ai-story-generator">ai story generator</a> · <a href="/faq">faq</a></p>
+</body></html>
