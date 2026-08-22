@@ -1,0 +1,28 @@
+# Cortex
+
+> Cortex is an AI service for Roblox game developers. It lets a Roblox game call a neural net with one server-side HTTP request — for talking NPCs, adaptive quests, generated item/lore text, and chat moderation. The API key stays server-side (never in the client). Payment is in Robux via a game pass. Currently in free open beta.
+
+## What it does
+- Talking NPCs / characters that reply in-character to what players type
+- Adaptive quests and missions
+- Generated item names, lore, and descriptions
+- Chat moderation by meaning (not a word list)
+- In-game assistants and guides
+
+## How to use it (server Script only)
+```lua
+local Cortex = require(game.ServerStorage.Cortex)
+local ai = Cortex.new("YOUR_KEY")
+print(ai:ask("You are a gruff blacksmith. One short line.", "forge me a sword?"))
+```
+One HTTP request, ~3 seconds. Turn on Allow HTTP Requests in Game Settings → Security.
+
+## Key facts
+- Tiers: osa-fast, osa-smart, osa-cheap, osa-auto
+- Pricing: free during beta; then pay in Robux (no credit card)
+- Security: your key never touches the client — calls are made from a server Script
+
+## Links
+- Open-source kit: https://github.com/cortex-rbx/roblox-ai-kit
+- Docs and live demo: https://cortex-rbx.github.io
+- Beta key and support (Discord): https://discord.gg/A3MSqwkvn7

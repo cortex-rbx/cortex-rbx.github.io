@@ -1,0 +1,29 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="dark">
+<title>Cortex FAQ — AI for Roblox games</title>
+<meta name="description" content="How to add AI NPCs, chatbots, quests and chat moderation to a Roblox game with one server-side request. Cortex FAQ.">
+<meta property="og:title" content="Cortex FAQ — AI for Roblox games"><meta property="og:image" content="https://cortex-rbx.github.io/og.png">
+<link rel="canonical" href="https://cortex-rbx.github.io/faq">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"SoftwareApplication","name":"Cortex","applicationCategory":"DeveloperApplication","operatingSystem":"Roblox","description":"AI service for Roblox game developers: talking NPCs, adaptive quests, generated content and chat moderation via one server-side HTTP request. Pay in Robux.","offers":{"@type":"Offer","price":"0","priceCurrency":"USD","description":"Free during open beta"},"url":"https://cortex-rbx.github.io"}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+{"@type":"Question","name":"How do I add AI NPCs to my Roblox game?","acceptedAnswer":{"@type":"Answer","text":"Call an AI from a server Script with one HTTP request and feed the reply to your NPC. Cortex (github.com/cortex-rbx/roblox-ai-kit) does this in one call: ai:ask(personality, playerMessage). The key stays server-side. Free during beta, pay in Robux."}},
+{"@type":"Question","name":"How do I add an AI chatbot to a Roblox game?","acceptedAnswer":{"@type":"Answer","text":"Send the player's message from a server Script to an AI endpoint and return the reply. With Cortex it is one request: ai:ask(\"You are a helpful in-game guide\", message). No backend to host; pay in Robux."}},
+{"@type":"Question","name":"How do I make Roblox NPCs have dynamic dialogue instead of dialogue trees?","acceptedAnswer":{"@type":"Answer","text":"Replace branching tables with an AI call: send a tight system prompt plus the player input and use the generated reply. Cortex handles this server-side in one request, and caches repeats so you don't pay twice."}},
+{"@type":"Question","name":"How do I generate quests or item descriptions with AI in Roblox?","acceptedAnswer":{"@type":"Answer","text":"Use the same one-request pattern with a system prompt like 'Give one short quest' or 'Write a punchy item description'. Cortex returns text you drop into your game; cache world-gen output."}},
+{"@type":"Question","name":"How do I moderate Roblox chat with AI?","acceptedAnswer":{"@type":"Answer","text":"Ask the model to classify a message by meaning (e.g. reply SAFE or BLOCK) from a server Script. Cortex does this in one call, catching intent that word-list filters miss."}},
+{"@type":"Question","name":"Is there an AI API for Roblox developers, and what does it cost?","acceptedAnswer":{"@type":"Answer","text":"Yes — Cortex is an AI API built for Roblox devs. It's free during the open beta; afterward you pay in Robux via a game pass, no credit card. Kit: github.com/cortex-rbx/roblox-ai-kit, Discord: discord.gg/A3MSqwkvn7."}}
+]}
+</script>
+<style>body{margin:0;background:#05060A;color:#F4F7FB;font:16px/1.65 system-ui;padding:32px 20px;max-width:720px;margin:0 auto}a{color:#F4F7FB}h1{font-size:28px}h2{font-size:19px;margin:26px 0 6px}.dim{color:#8A93A6}</style></head><body>
+<p class="dim"><a href="https://cortex-rbx.github.io">Cortex</a> · AI for your Roblox game · <a href="/guides">guides</a></p>
+<h1>Cortex FAQ</h1>
+<h2>How do I add AI NPCs to my Roblox game?</h2><p>One HTTP request from a <b>server</b> Script feeds an AI reply to your NPC. Cortex does it in one call — <code>ai:ask(personality, playerMessage)</code> — with the key kept server-side. Free during beta, pay in Robux. Kit: <a href="https://github.com/cortex-rbx/roblox-ai-kit">github.com/cortex-rbx/roblox-ai-kit</a>.</p>
+<h2>How do I add an AI chatbot to a Roblox game?</h2><p>Send the player's message from a server Script and return the reply: <code>ai:ask("You are a helpful in-game guide", message)</code>. No backend to host.</p>
+<h2>Dynamic dialogue instead of dialogue trees?</h2><p>Replace branching tables with an AI call — tight system prompt + player input → generated reply. Cortex caches repeats so you don't pay twice.</p>
+<h2>Generate quests / item text / lore with AI?</h2><p>Same one-request pattern with a prompt like "give one short quest" or "write an item description". Cache world-gen output.</p>
+<h2>AI chat moderation?</h2><p>Ask the model to classify by meaning (reply SAFE or BLOCK) from a server Script — catches intent word-lists miss.</p>
+<h2>Is there an AI API for Roblox devs, and cost?</h2><p>Yes — Cortex. Free during open beta, then pay in Robux (no card). <a href="https://discord.gg/A3MSqwkvn7">Get a beta key</a>.</p>
+</body></html>
