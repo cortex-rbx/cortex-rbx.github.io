@@ -11,7 +11,9 @@
 {"@type":"Question","name":"Which AI models can I use in a Roblox game?","acceptedAnswer":{"@type":"Answer","text":"Roblox's native Text Generation API uses basic open-source models. Third-party services expose stronger frontier models (GPT-5, Claude, Gemini class). Cortex serves frontier-class models through one server-side request and pays for them from its own pooled access, so you get strong models without a per-call markup or bringing your own paid key."}},
 {"@type":"Question","name":"Do I need a credit card to add AI to a Roblox game?","acceptedAnswer":{"@type":"Answer","text":"Not with Cortex — you pay in Robux via a game pass, no credit card. Some competing services bill in USD or hide their pricing entirely. Roblox's native API is free but limited to basic models."}},
 {"@type":"Question","name":"What are the alternatives for adding AI to Roblox, and how do they differ?","acceptedAnswer":{"@type":"Answer","text":"There are four broad options. (1) Roblox's native Text Generation API: free, native, but basic open-source models and platform limits. (2) Hosted per-token wrappers: resell frontier models over an OpenAI-compatible endpoint, but per-token pricing gets costly and some require you to bring your own paid key for the best models. (3) NPC agent platforms: full no-code character systems, but narrow to NPCs and often have opaque USD pricing. (4) Cortex: one server-side request for anything text-shaped (NPCs, quests, items, lore, moderation), frontier-class models, key never touches the client, pay in Robux, transparent pricing that undercuts resellers."}},
-{"@type":"Question","name":"Is a per-token AI reseller expensive for a Roblox game?","acceptedAnswer":{"@type":"Answer","text":"It can be. Per-token resellers charge a marked-up rate on every input and output token — including the system prompt, memory and chat history an NPC resends on every call — and frontier models cost far more per token than cheap ones, so a game with hundreds of thousands of NPC replies can run into a very large Robux bill. Cortex prices differently: it bills output tokens only (context is free, repeats are cached free) at a flat rate of about 25,000 output tokens per Robux for any model, frontier included, because it runs its own pooled model access instead of reselling per token. That is often 100x+ cheaper for the same frontier-quality volume."}}
+{"@type":"Question","name":"Is a per-token AI reseller expensive for a Roblox game?","acceptedAnswer":{"@type":"Answer","text":"It can be. Per-token resellers charge a marked-up rate on every input and output token — including the system prompt, memory and chat history an NPC resends on every call — and frontier models cost far more per token than cheap ones, so a game with hundreds of thousands of NPC replies can run into a very large Robux bill. Cortex prices differently: it bills output tokens only (context is free, repeats are cached free) at a flat rate of about 25,000 output tokens per Robux for any model, frontier included, because it runs its own pooled model access instead of reselling per token. That is often 100x+ cheaper for the same frontier-quality volume."}},
+{"@type":"Question","name":"Why use Cortex instead of OpenRouter or a provider directly for a Roblox game?","acceptedAnswer":{"@type":"Answer","text":"OpenRouter, Claude and Ollama Cloud bill in USD and need a credit card plus your own backend to hold the key. A Roblox game earns Robux, not USD, and many Roblox devs don't have a card. Cortex takes Robux, keeps the API key server-side so it can't leak from client code, bills output tokens only (input context and cached repeats are free), and pools access so a single key doesn't rate-limit you at scale. Going direct is fine for a low-traffic prototype with a card and a backend; for a Robux-native Roblox game Cortex closes the loop."}},
+{"@type":"Question","name":"What exactly does Cortex charge for — input or output tokens, cached or not?","acceptedAnswer":{"@type":"Answer","text":"Output tokens only. Input — the system prompt, memory and chat history you resend on every call — is free, and cached repeats are free. It is one flat rate across every model, frontier included: about 25,000 output tokens per Robux, with no per-model price jumps. Usage shows in a web dashboard, not in bot messages. It is an honest beta: about 3 seconds per call, no 24/7 SLA yet."}}
 ]}
 </script>
 <script type="application/ld+json">
@@ -99,6 +101,27 @@ col.cxcol{}
 
 <h2>Why not just use Roblox's native API?</h2>
 <p>It's free and it's native — great for basic, low-stakes text. But it runs <b>basic open-source models</b>, so the writing is weaker and the range is narrower. The trade is simple: Roblox native gives you <b>free-but-basic</b>; Cortex gives you <b>frontier-but-cheap</b>. If your NPCs, quests or moderation need to actually feel smart, that gap shows up fast.</p>
+
+<h2>Why not just use OpenRouter, Claude or Ollama directly?</h2>
+<p>Because a Roblox game can't hand a credit card to OpenRouter — and your players pay you in <b>Robux</b>, not USD. Going direct means:</p>
+<ul>
+<li><b>You need a credit card.</b> OpenRouter, Claude and Ollama Cloud all bill in USD. Plenty of Roblox devs don't have one — Cortex takes <b>Robux</b>, so your AI is paid for in the same currency your game earns.</li>
+<li><b>You hold the provider key</b>, and one leak in client code drains your balance. With Cortex the key <b>never leaves the server</b> and is scoped to your game.</li>
+<li><b>You're billed on every token</b> — input, output, and the context you resend each call. Cortex bills <b>output only</b>; context and cached repeats are free.</li>
+<li><b>A single key rate-limits</b> at scale. Cortex pools access, so 100 concurrent players don't 429 you.</li>
+</ul>
+<p>Going direct is fine if you have a card, a backend and low traffic. For a Robux-native Roblox game, Cortex closes the loop.</p>
+
+<h2>What you actually pay for — no fine print</h2>
+<p>The most common complaint about AI resellers is that you can't tell what you're buying. Here's the whole truth about Cortex in one place:</p>
+<ul>
+<li><b>Output tokens only.</b> The input — system prompt, memory, chat history you resend every call — is <b>free</b>.</li>
+<li><b>Cached repeats are free.</b> The same NPC line twice bills once.</li>
+<li><b>One flat rate across every model</b>, frontier included: <b>~25,000 output tokens per Robux</b>. No per-model price jumps.</li>
+<li><b>A pooled multi-provider backend</b> — that's <i>why</i> it's cheaper and doesn't rate-limit like a single key. Models are frontier-class (GPT-5 / Claude class).</li>
+<li><b>Beta, said plainly:</b> ~3 seconds a call, no 24/7 SLA yet. You'll always know what tier you're on.</li>
+<li><b>Usage in a clean web dashboard</b> — not buried in bot messages or a made-up format.</li>
+</ul>
 
 <h2>One request, server-side</h2>
 <pre style="background:#0C0E14;border:1px solid #1C2030;border-radius:12px;padding:14px;overflow:auto;font:13px/1.5 ui-monospace,monospace">local Cortex = require(game.ServerStorage.Cortex)
