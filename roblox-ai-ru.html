@@ -1,0 +1,66 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="dark">
+<title>ИИ для Roblox-игры — нейросеть из серверного скрипта, оплата робуксами | Cortex</title>
+<meta name="description" content="Cortex — нейросеть в любую часть Roblox-игры одним серверным запросом: говорящие NPC, квесты, генерация предметов и лора, модерация чата по смыслу. Оплата робуксами, без карты. Ключ не попадает на клиент.">
+<meta name="keywords" content="ИИ для Roblox, нейросеть Roblox, ChatGPT Roblox, AI NPC Roblox, ИИ NPC Roblox, ИИ за робуксы, нейросеть в игру Roblox">
+<meta property="og:type" content="article"><meta property="og:title" content="ИИ для Roblox-игры за робуксы — Cortex">
+<meta property="og:description" content="Нейросеть в Roblox одним серверным запросом: NPC, квесты, генерация, модерация. Оплата робуксами, без карты."><meta property="og:image" content="https://cortex-rbx.github.io/og.png">
+<link rel="canonical" href="https://cortex-rbx.github.io/roblox-ai-ru">
+<link rel="alternate" hreflang="ru" href="https://cortex-rbx.github.io/roblox-ai-ru">
+<link rel="alternate" hreflang="en" href="https://cortex-rbx.github.io/">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"SoftwareApplication","name":"Cortex","inLanguage":"ru","applicationCategory":"DeveloperApplication","operatingSystem":"Roblox","description":"ИИ-сервис для разработчиков Roblox: говорящие NPC, адаптивные квесты, генерация контента и модерация чата одним серверным HTTP-запросом. Оплата робуксами.","offers":{"@type":"Offer","price":"0","priceCurrency":"RUB","description":"Бесплатно в открытой бете; далее оплата робуксами"},"url":"https://cortex-rbx.github.io"}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","inLanguage":"ru","mainEntity":[
+{"@type":"Question","name":"Как добавить ИИ-NPC в игру Roblox?","acceptedAnswer":{"@type":"Answer","text":"Вызовите нейросеть из серверного Script одним HTTP-запросом и передайте ответ своему NPC. Cortex делает это одной строкой: ai:ask(характер, сообщение_игрока). Ключ остаётся на сервере и не попадает на клиент. Бесплатно в бете, дальше оплата робуксами. Набор: github.com/cortex-rbx/roblox-ai-kit."}},
+{"@type":"Question","name":"Сколько стоит ИИ для Roblox и можно ли платить робуксами?","acceptedAnswer":{"@type":"Answer","text":"Да, Cortex оплачивается робуксами через game pass — без банковской карты. Тарификация только по выходным токенам (входной промпт, память и история — бесплатно), повторы берутся из кэша бесплатно, ставка около 25 000 выходных токенов за 1 робукс на любой модели, включая топовые. Сейчас идёт бесплатная открытая бета с ключами для первых тестеров."}},
+{"@type":"Question","name":"Хватит ли бесплатных нейросетей для игры Roblox со 100 игроками?","acceptedAnswer":{"@type":"Answer","text":"Для прототипа — да. Для живой игры со ~100 онлайн обычно нет: у бесплатных API лимит 15–30 запросов в минуту, а сотня игроков даёт сотни запросов в пик, и появляются ошибки 429. Приходится связывать 5–8 ключей роутером и делать свой кэш. Cortex объединяет доступ за одним ключом без лимита одного провайдера и кэширует повторы бесплатно."}},
+{"@type":"Question","name":"Как сделать говорящих NPC и квесты с нейросетью в Roblox?","acceptedAnswer":{"@type":"Answer","text":"Одним серверным запросом: передаёте краткий системный промпт (характер NPC или задание) и ввод игрока, получаете сгенерированный текст. Тот же приём для квестов, названий и описаний предметов, лора и модерации чата по смыслу. Cortex обрабатывает всё это одним запросом на серверной стороне и кэширует повторы."}},
+{"@type":"Question","name":"Чем Cortex отличается от других ИИ-сервисов для Roblox?","acceptedAnswer":{"@type":"Answer","text":"Cortex использует собственный пул доступа к моделям, а не перепродаёт токены с наценкой, поэтому топовые модели стоят как дешёвые. Тарификация только по выходу, вход и кэш повторов — бесплатно, оплата робуксами, ключ никогда не попадает на клиент, и охват — любой текст: NPC, квесты, предметы, лор, модерация. Сравнение: cortex-rbx.github.io/compare"}}
+]}
+</script>
+<style>
+body{margin:0;background:#05060A;color:#F4F7FB;font:16px/1.65 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;padding:32px 20px;max-width:720px;margin:0 auto}
+a{color:#F4F7FB} h1{font-size:29px;line-height:1.22;margin:6px 0 14px} h2{font-size:20px;margin:28px 0 8px}
+.dim{color:#8A93A6} pre{background:#0C0E14;border:1px solid #1C2030;border-radius:12px;padding:14px;overflow:auto;font:13px/1.5 ui-monospace,monospace}
+.cta{display:inline-block;margin:8px 10px 0 0;padding:11px 16px;border-radius:10px;font-weight:600;text-decoration:none}
+.p{background:#F4F7FB;color:#05060A} .g{border:1px solid #1C2030}
+.reward{background:#0C0E14;border:1px solid #1C2030;border-radius:12px;padding:14px;margin:22px 0}
+.f{margin-top:28px;font-size:13px;line-height:2}
+</style></head><body>
+<p class="dim"><a href="https://cortex-rbx.github.io">Cortex</a> · ИИ для твоей Roblox-игры · <a href="/compare">сравнение</a> · <a href="/">English</a></p>
+<h1>Нейросеть в Roblox-игру — один запрос из серверного скрипта</h1>
+<p>Cortex даёт твоей игре мозг: <b>говорящие NPC, адаптивные квесты, генерация предметов и лора, модерация чата по смыслу</b> — всё, что связано с текстом. Один серверный HTTP-запрос, ~3 секунды на ответ.</p>
+<ul>
+<li><b>Ключ не попадает на клиент.</b> Все вызовы идут из серверного Script.</li>
+<li><b>Оплата робуксами</b> через game pass. Без карты, без своего бэкенда.</li>
+<li><b>Открытая бета — бесплатные ключи первым девам.</b> Забрать в Discord.</li>
+</ul>
+
+<h2>Один запрос (только серверный Script)</h2>
+<pre>local Cortex = require(game.ServerStorage.Cortex)
+local ai = Cortex.new("ТВОЙ_КЛЮЧ")
+
+print(ai:ask(
+  "Ты угрюмый кузнец-гном. Одна короткая реплика в характере.",
+  "Скуёшь мне меч?"
+))
+--> "Ага — тащи руду, и я отобью тебе клинок."</pre>
+<p>~3 секунды, и ты <b>платишь робуксами</b>. Тарификация только по выходным токенам — входной промпт, память и история бесплатны, повторы берутся из кэша даром.</p>
+
+<h2>Почему Cortex дешевле перекупов</h2>
+<p>Большинство сторонних ИИ для Roblox — <b>перепродавцы</b>: покупают модели у OpenAI/Anthropic и берут с тебя наценку за каждый токен, включая системный промпт и историю, которые NPC шлёт <i>при каждом вызове</i>. Cortex работает на <b>собственном пуле доступа</b>: платишь только за выход, топовые модели по той же ставке (~25 000 выходных токенов за 1 робукс), а повторы — бесплатно. Пакет за <b>499 R$</b> — это ~187 000 реплик NPC.</p>
+
+<h2>Хватит ли бесплатных нейросетей?</h2>
+<p>Для прототипа — да. На <b>~100 игроках онлайн</b> бесплатные ключи упираются в лимит 15–30 запросов в минуту и начинают отдавать ошибки <b>429</b> — NPC просто молчит. Приходится связывать 5–8 ключей роутером и писать свой кэш. Cortex снимает это: один ключ, пул без лимита одного провайдера, кэш повторов бесплатно. Подробно: <a href="/roblox-free-ai-vs-cortex">бесплатные ключи vs Cortex</a>.</p>
+
+<div class="reward">🎁 <b>Открытая бета — бесплатные ключи первым девам.</b> Ранние тестеры сохраняют вечную founder-скидку, когда станет платно, плюс награда робуксами и показ твоей игры в каналах Cortex за запуск в живой игре с обратной связью.</div>
+
+<h2>Начать</h2>
+<a class="cta p" href="https://discord.gg/A3MSqwkvn7">Забрать бесплатный ключ →</a>
+<a class="cta g" href="https://github.com/cortex-rbx/roblox-ai-kit">Набор на GitHub</a>
+<a class="cta g" href="/compare">Сравнение</a>
+
+<p class="f dim">English: <a href="/">home</a> · <a href="/compare">compare</a> · <a href="/roblox-ai-npc">ai npc</a> · <a href="/faq">faq</a></p>
+</body></html>
