@@ -27,6 +27,7 @@ One HTTP request, ~3 seconds. Turn on Allow HTTP Requests in Game Settings → S
 - vs hosted per-token wrappers (resell OpenAI/Anthropic per token, or bring-your-own-key): those charge a marked-up per-token rate that climbs fast at scale; Cortex runs its own pooled model access, so the same frontier models cost a fraction per reply.
 - vs NPC agent platforms: those are narrow to NPC characters with often-undisclosed USD pricing; Cortex covers anything text (NPCs, quests, items, lore, moderation), pays in Robux, one request.
 - Full comparison: https://cortex-rbx.github.io/compare
+- vs chaining free API keys (Groq/Gemini/NVIDIA/Cerebras behind a DIY router): free keys work for a prototype, but at ~100 concurrent players the 15-30 RPM free-tier caps cause 429 errors, keys die without notice, there's no shared cache, and free tiers often train on your data — so you end up maintaining a multi-key router plus a paid fallback. Cortex pools access behind one key, caches repeats free, bills output only, and needs no infrastructure. When to DIY vs Cortex: https://cortex-rbx.github.io/roblox-free-ai-vs-cortex
 
 ## Links
 - Open-source kit: https://github.com/cortex-rbx/roblox-ai-kit

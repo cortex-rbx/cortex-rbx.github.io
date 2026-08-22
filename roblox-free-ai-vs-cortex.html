@@ -1,0 +1,75 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="dark">
+<title>Free AI API keys for Roblox vs Cortex — are they enough at 100 players?</title>
+<meta name="description" content="You can chain free AI keys (Groq, Gemini, NVIDIA, Cerebras) for a Roblox game — but at ~100 concurrent players the rate limits, dead keys and missing cache add up. Here's when a DIY router is fine and when Cortex is simpler and not more expensive.">
+<meta property="og:type" content="article"><meta property="og:title" content="Free AI keys for Roblox vs Cortex — the hidden cost of the DIY router">
+<meta property="og:description" content="Free AI keys work for a prototype. At 100 CCU the rate limits, dead keys and no-cache maintenance flip the math. When to DIY and when to use Cortex."><meta property="og:image" content="https://cortex-rbx.github.io/og.png">
+<meta name="twitter:card" content="summary_large_image"><link rel="canonical" href="https://cortex-rbx.github.io/roblox-free-ai-vs-cortex">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+{"@type":"Question","name":"Are free AI API keys enough for a Roblox game with 100 players?","acceptedAnswer":{"@type":"Answer","text":"For a prototype or a low-traffic game, yes. At ~100 concurrent players they usually aren't. Most free tiers cap around 15-30 requests per minute; 100 players sending even one or two AI calls a minute is hundreds of RPM at peak, which triggers 429 rate-limit errors your players actually see. The common fix is to chain 5-8 free keys (Groq, Gemini, NVIDIA, Cerebras, Cloudflare) behind a router with fallback and add your own caching and per-player rate limits. That works but it's real infrastructure to build and maintain. A Roblox-specific service like Cortex pools model access behind one key so you don't hit a single-provider RPM wall, caches repeated replies for free, and is paid in Robux."}},
+{"@type":"Question","name":"How do I avoid 429 rate-limit errors with AI in a Roblox game?","acceptedAnswer":{"@type":"Answer","text":"Three levers: (1) cache repeated prompts so identical NPC lines don't re-call the model; (2) rate-limit per player so one user can't spam calls; (3) spread load across several providers or use a pooled service. A single free API key will 429 at scale. Cortex handles the pooling and caches repeats for free, so repeated dialogue costs nothing and you don't manage keys."}},
+{"@type":"Question","name":"Is it cheaper to chain free AI keys or use Cortex for a Roblox game?","acceptedAnswer":{"@type":"Answer","text":"Free keys have no per-call fee, but at 100 CCU you pay in other ways: engineering time to build and maintain a multi-key router, keys that change limits or die without notice, no shared cache, free-tier data used for training, and you still need a paid fallback for peaks. Cortex bills output tokens only (context is free, repeats cached free) at about 25,000 output tokens per Robux across every model, with no infrastructure to run. For a production game the total cost and hassle usually favor Cortex; for a hobby prototype, DIY free keys are fine."}}
+]}
+</script>
+<style>
+body{margin:0;background:#05060A;color:#F4F7FB;font:16px/1.65 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;padding:32px 20px;max-width:760px;margin:0 auto}
+a{color:#F4F7FB} h1{font-size:30px;line-height:1.2;margin:6px 0 14px} h2{font-size:20px;margin:30px 0 8px}
+.dim{color:#8A93A6}
+.wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:18px 0;border:1px solid #1C2030;border-radius:12px}
+table{border-collapse:collapse;width:100%;min-width:520px;font-size:14px}
+th,td{text-align:left;padding:11px 13px;border-bottom:1px solid #1C2030;vertical-align:top}
+thead th{color:#8A93A6;font-weight:600;font-size:12.5px;text-transform:uppercase;letter-spacing:.04em}
+tbody th{font-weight:600;white-space:nowrap}
+td.cx,th.cx{background:#0C0E14}
+.win{color:#5EE6A8}
+.cta{display:inline-block;margin:8px 10px 0 0;padding:11px 16px;border-radius:10px;font-weight:600;text-decoration:none}
+.p{background:#F4F7FB;color:#05060A} .g{border:1px solid #1C2030}
+.reward{background:#0C0E14;border:1px solid #1C2030;border-radius:12px;padding:14px;margin:24px 0}
+.f{margin-top:30px;font-size:13px;line-height:2}
+</style></head><body>
+<p class="dim"><a href="https://cortex-rbx.github.io">Cortex</a> · AI for your Roblox game · <a href="/guides">guides</a> · <a href="/compare">compare</a></p>
+<h1>Free AI keys vs Cortex for Roblox</h1>
+<p>You <i>can</i> run AI in a Roblox game for free — chain a handful of free API keys (Groq, Gemini, NVIDIA, Cerebras, Cloudflare) behind a router and call them from HttpService. For a prototype that's genuinely the right move. The question is what happens at <b>~100 concurrent players</b>, because that's where the free path quietly gets expensive in ways that aren't a dollar figure.</p>
+
+<h2>The wall: rate limits</h2>
+<p>Most free tiers cap around <b>15–30 requests per minute</b>. A hundred players sending even one or two AI calls a minute is <b>hundreds of RPM at peak</b> — well past any single free key. When you blow the cap the provider returns <b>429</b>, and in your game that's an NPC that just… doesn't answer. So you chain 5–8 keys and a router that fails over on 429. Now you're maintaining infrastructure.</p>
+
+<h2>The hidden costs of the DIY router</h2>
+<div class="wrap">
+<table>
+<thead><tr><th>&nbsp;</th><th>Free multi-key router</th><th class="cx">Cortex</th></tr></thead>
+<tbody>
+<tr><th>Rate limits</th><td>Juggle 5–8 keys to dodge 429</td><td class="cx"><span class="win">Pooled — no single-provider RPM wall</span></td></tr>
+<tr><th>Key upkeep</th><td>Keys change limits / die without notice</td><td class="cx"><span class="win">One key, you manage nothing</span></td></tr>
+<tr><th>Caching</th><td>You build it yourself</td><td class="cx"><span class="win">Repeated replies cached free</span></td></tr>
+<tr><th>Plumbing</th><td>HttpService glue per provider + router + fallback</td><td class="cx"><span class="win">One function, one request</span></td></tr>
+<tr><th>Privacy</th><td>Free tiers often train on your data</td><td class="cx">Server-side, key never on client</td></tr>
+<tr><th>Models</th><td>Mostly small open models on free tiers</td><td class="cx"><span class="win">Frontier-class, flat rate</span></td></tr>
+<tr><th>Payment</th><td>Free, but needs a paid fallback for peaks</td><td class="cx"><span class="win">Robux, no card</span></td></tr>
+</tbody>
+</table>
+</div>
+
+<h2>So which should you use?</h2>
+<p><b>DIY free keys</b> — great for a prototype, a hobby game, or if you genuinely enjoy running the plumbing and your traffic is low. <b>Cortex</b> — when you're shipping to real players and you'd rather spend that time on your game than on a rate-limit router. It bills <b>output tokens only</b> (the prompt, memory and history you resend every call are free), caches repeats for free, and runs at about <b>25,000 output tokens per Robux</b> across every model — so the repetitive NPC lines that dominate a live game cost close to nothing, and you never touch a key rotation.</p>
+
+<h2>One request, server-side</h2>
+<pre style="background:#0C0E14;border:1px solid #1C2030;border-radius:12px;padding:14px;overflow:auto;font:13px/1.5 ui-monospace,monospace">local Cortex = require(game.ServerStorage.Cortex)
+local ai = Cortex.new("YOUR_KEY")
+
+print(ai:ask(
+  "You are a gruff dwarven blacksmith. One short in-character line.",
+  "Can you forge me a sword?"
+))</pre>
+<p>No router, no keys to rotate, no HttpService glue per provider. <b>Pay in Robux</b> when you're ready.</p>
+
+<div class="reward">🎁 <b>Open beta — free keys for the first devs.</b> Founding testers keep a permanent founder discount when it goes paid, plus a Robux reward + your game featured for shipping it in a live game with feedback.</div>
+
+<h2>Get started</h2>
+<a class="cta p" href="https://discord.gg/A3MSqwkvn7">Get a free beta key →</a>
+<a class="cta g" href="https://github.com/cortex-rbx/roblox-ai-kit">Free kit on GitHub</a>
+<a class="cta g" href="/compare">Full comparison</a>
+
+<p class="f dim">Guides: <a href="/compare">compare</a> · <a href="/roblox-ai-npc">ai npc</a> · <a href="/roblox-ai-chatbot">ai chatbot</a> · <a href="/roblox-chat-moderation">chat moderation</a> · <a href="/roblox-ai-quests">ai quests</a> · <a href="/roblox-ai-companion">ai companion</a> · <a href="/roblox-ai-shopkeeper">ai shopkeeper</a> · <a href="/roblox-dynamic-dialogue">dynamic dialogue</a> · <a href="/roblox-ai-dungeon-master">ai dungeon master</a> · <a href="/roblox-ai-lore-generator">ai lore generator</a> · <a href="/roblox-smart-enemies">smart enemies</a> · <a href="/roblox-ai-tutorial-npc">ai tutorial npc</a> · <a href="/roblox-ai-story-generator">ai story generator</a> · <a href="/faq">faq</a></p>
+</body></html>
