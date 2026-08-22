@@ -1,0 +1,49 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="dark">
+<title>ИИ-NPC в Roblox — говорящие персонажи одним запросом | Cortex</title>
+<meta name="description" content="Как сделать говорящих ИИ-NPC в Roblox: персонаж отвечает в характере на то, что реально пишет игрок, без огромных диалоговых деревьев. Один серверный запрос, оплата робуксами.">
+<meta name="keywords" content="ИИ NPC Roblox, говорящие NPC Roblox, нейросеть NPC Roblox, ChatGPT NPC Roblox, диалоги NPC ИИ, как сделать умного NPC Roblox">
+<meta property="og:type" content="article"><meta property="og:title" content="ИИ-NPC в Roblox — говорящие персонажи одним запросом">
+<meta property="og:description" content="NPC отвечают в характере на реальные слова игрока. Один серверный запрос, оплата робуксами."><meta property="og:image" content="https://cortex-rbx.github.io/og.png">
+<link rel="canonical" href="https://cortex-rbx.github.io/roblox-ai-npc-ru">
+<link rel="alternate" hreflang="ru" href="https://cortex-rbx.github.io/roblox-ai-npc-ru">
+<link rel="alternate" hreflang="en" href="https://cortex-rbx.github.io/roblox-ai-npc">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","inLanguage":"ru","mainEntity":[
+{"@type":"Question","name":"Как сделать говорящего ИИ-NPC в Roblox?","acceptedAnswer":{"@type":"Answer","text":"Вызовите нейросеть из серверного Script одним HTTP-запросом: передайте характер NPC как системный промпт и сообщение игрока, а ответ выведите над персонажем. С Cortex это одна строка: ai:ask(характер, сообщение_игрока). Ключ остаётся на сервере. Никаких диалоговых деревьев — NPC отвечает в характере на то, что игрок реально написал. Бесплатно в бете, дальше робуксами."}},
+{"@type":"Question","name":"Как убрать диалоговые деревья и сделать динамические диалоги в Roblox?","acceptedAnswer":{"@type":"Answer","text":"Замените ветвящиеся таблицы одним вызовом ИИ: короткий системный промпт с характером + ввод игрока → сгенерированная реплика. Cortex делает это на серверной стороне одним запросом и кэширует повторы бесплатно, так что типовые фразы не тарифицируются дважды."}},
+{"@type":"Question","name":"Сколько стоит ИИ-NPC в Roblox?","acceptedAnswer":{"@type":"Answer","text":"У Cortex тарификация только по выходным токенам (характер, память и история — бесплатно), повторы из кэша даром, ~25 000 выходных токенов за 1 робукс на любой модели. Пакет 499 R$ — это примерно 187 000 коротких реплик NPC. Сейчас идёт бесплатная бета."}}
+]}
+</script>
+<style>
+body{margin:0;background:#05060A;color:#F4F7FB;font:16px/1.65 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;padding:32px 20px;max-width:720px;margin:0 auto}
+a{color:#F4F7FB} h1{font-size:29px;line-height:1.22;margin:6px 0 14px} h2{font-size:20px;margin:28px 0 8px}
+.dim{color:#8A93A6} pre{background:#0C0E14;border:1px solid #1C2030;border-radius:12px;padding:14px;overflow:auto;font:13px/1.5 ui-monospace,monospace}
+.cta{display:inline-block;margin:8px 10px 0 0;padding:11px 16px;border-radius:10px;font-weight:600;text-decoration:none}
+.p{background:#F4F7FB;color:#05060A} .g{border:1px solid #1C2030}
+.reward{background:#0C0E14;border:1px solid #1C2030;border-radius:12px;padding:14px;margin:22px 0}
+.f{margin-top:28px;font-size:13px;line-height:2}
+</style></head><body>
+<p class="dim"><a href="https://cortex-rbx.github.io">Cortex</a> · ИИ для твоей Roblox-игры · <a href="/roblox-ai-ru">о сервисе</a> · <a href="/compare">сравнение</a> · <a href="/roblox-ai-npc">English</a></p>
+<h1>Как сделать говорящих ИИ-NPC в Roblox</h1>
+<p>Диалоговые деревья устаревают мгновенно: игрок пишет не то, что ты предусмотрел, и упирается в стену. С Cortex NPC <b>отвечает в характере на то, что игрок реально написал</b> — без гигантских таблиц и ветвлений.</p>
+<h2>Один серверный запрос</h2>
+<p class="dim">Положи ModuleScript в ServerStorage и вызывай из <b>серверного</b> Script — ключ не попадает на клиент.</p>
+<pre>local Cortex = require(game.ServerStorage.Cortex)
+local ai = Cortex.new("ТВОЙ_КЛЮЧ")
+
+print(ai:ask(
+  "Ты угрюмый кузнец-гном. Одна короткая реплика в характере.",
+  "Скуёшь мне меч?"
+))
+--> "Ага — тащи руду, и я отобью тебе клинок."</pre>
+<p>~3 секунды, и ты <b>платишь робуксами</b> через game pass. Без карты и без своего бэкенда.</p>
+<h2>Почему это дёшево на потоке</h2>
+<p>NPC на каждый вызов шлёт один и тот же характер и историю — у перекупщиков за это берут деньги <i>каждый раз</i>. Cortex тарифицирует <b>только выход</b>, вход бесплатен, а повторяющиеся реплики берутся из кэша даром. NPC часто говорят похожее — экономия огромная. ~25 000 выходных токенов = 1 робукс, пакет 499 R$ ≈ ~187 000 реплик.</p>
+<div class="reward">🎁 <b>Открытая бета — бесплатные ключи первым девам.</b> Ранние тестеры сохраняют вечную founder-скидку + награду робуксами и показ игры за запуск с обратной связью.</div>
+<h2>Начать</h2>
+<a class="cta p" href="https://discord.gg/A3MSqwkvn7">Забрать бесплатный ключ →</a>
+<a class="cta g" href="https://github.com/cortex-rbx/roblox-ai-kit">Набор на GitHub</a>
+<a class="cta g" href="/roblox-ai-ru">О сервисе</a>
+<p class="f dim">Ещё по-русски: <a href="/roblox-ai-ru">о сервисе</a> · <a href="/roblox-ai-moderation-ru">модерация чата</a> · <a href="/roblox-ai-quests-ru">генерация квестов</a> · <a href="/compare">сравнение</a></p>
+</body></html>

@@ -1,0 +1,48 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="dark">
+<title>Модерация чата в Roblox нейросетью — фильтр по смыслу | Cortex</title>
+<meta name="description" content="Как модерировать чат в Roblox с ИИ: нейросеть классифицирует сообщение по смыслу (можно/нельзя), а не по списку слов, и ловит обход фильтра. Один серверный запрос, оплата робуксами.">
+<meta name="keywords" content="модерация чата Roblox, ИИ модерация Roblox, фильтр чата Roblox нейросеть, античит чат Roblox, модерация по смыслу Roblox">
+<meta property="og:type" content="article"><meta property="og:title" content="Модерация чата в Roblox нейросетью — по смыслу, а не по списку слов">
+<meta property="og:description" content="ИИ классифицирует сообщение по смыслу и ловит обход фильтра. Один серверный запрос, робуксами."><meta property="og:image" content="https://cortex-rbx.github.io/og.png">
+<link rel="canonical" href="https://cortex-rbx.github.io/roblox-ai-moderation-ru">
+<link rel="alternate" hreflang="ru" href="https://cortex-rbx.github.io/roblox-ai-moderation-ru">
+<link rel="alternate" hreflang="en" href="https://cortex-rbx.github.io/roblox-chat-moderation">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","inLanguage":"ru","mainEntity":[
+{"@type":"Question","name":"Как модерировать чат в Roblox с помощью ИИ?","acceptedAnswer":{"@type":"Answer","text":"Из серверного Script отправьте сообщение игрока нейросети и попросите классифицировать его по смыслу — например, ответить SAFE или BLOCK. Cortex делает это одним запросом и ловит намерение, которое списочные фильтры пропускают (обход через опечатки, эвфемизмы, разбивку слов). Оплата робуксами, ключ на сервере."}},
+{"@type":"Question","name":"Чем ИИ-модерация лучше фильтра по списку слов в Roblox?","acceptedAnswer":{"@type":"Answer","text":"Список слов обходится опечатками, пробелами и эвфемизмами. Нейросеть оценивает смысл целиком, поэтому ловит завуалированную токсичность и пропускает безобидные фразы с 'плохими' подстроками. Cortex классифицирует по смыслу одним серверным запросом и кэширует повторы бесплатно."}},
+{"@type":"Question","name":"Сколько стоит ИИ-модерация чата в Roblox?","acceptedAnswer":{"@type":"Answer","text":"Ответ модерации короткий (SAFE/BLOCK), а Cortex платит только за выход, поэтому цена крошечная: ~25 000 выходных токенов за 1 робукс, повторы из кэша бесплатно. Проверка одного сообщения — доли юнита. Сейчас бесплатная бета."}}
+]}
+</script>
+<style>
+body{margin:0;background:#05060A;color:#F4F7FB;font:16px/1.65 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;padding:32px 20px;max-width:720px;margin:0 auto}
+a{color:#F4F7FB} h1{font-size:29px;line-height:1.22;margin:6px 0 14px} h2{font-size:20px;margin:28px 0 8px}
+.dim{color:#8A93A6} pre{background:#0C0E14;border:1px solid #1C2030;border-radius:12px;padding:14px;overflow:auto;font:13px/1.5 ui-monospace,monospace}
+.cta{display:inline-block;margin:8px 10px 0 0;padding:11px 16px;border-radius:10px;font-weight:600;text-decoration:none}
+.p{background:#F4F7FB;color:#05060A} .g{border:1px solid #1C2030}
+.reward{background:#0C0E14;border:1px solid #1C2030;border-radius:12px;padding:14px;margin:22px 0}
+.f{margin-top:28px;font-size:13px;line-height:2}
+</style></head><body>
+<p class="dim"><a href="https://cortex-rbx.github.io">Cortex</a> · ИИ для твоей Roblox-игры · <a href="/roblox-ai-ru">о сервисе</a> · <a href="/compare">сравнение</a> · <a href="/roblox-chat-moderation">English</a></p>
+<h1>Модерация чата в Roblox нейросетью — по смыслу</h1>
+<p>Списочный фильтр обходят за секунду: опечатка, пробел между букв, эвфемизм — и токсичность проходит, а безобидное «assassin» блокируется. Нейросеть смотрит на <b>смысл целиком</b>.</p>
+<h2>Один серверный запрос</h2>
+<pre>local Cortex = require(game.ServerStorage.Cortex)
+local ai = Cortex.new("ТВОЙ_КЛЮЧ")
+
+local verdict = ai:ask(
+  "Ты модератор детской игры. Ответь одним словом: SAFE или BLOCK.",
+  message
+)
+if verdict == "BLOCK" then --[[ не пропускать ]] end</pre>
+<p>ИИ ловит завуалированную токсичность и обход фильтра, а безобидные фразы с «плохими» подстроками пропускает. Ключ на сервере, оплата робуксами.</p>
+<h2>Это почти бесплатно</h2>
+<p>Ответ модерации — одно слово, а Cortex платит <b>только за выход</b>: проверка сообщения стоит доли юнита, повторы из кэша даром. ~25 000 выходных токенов = 1 робукс. Модерировать можно хоть весь чат.</p>
+<div class="reward">🎁 <b>Открытая бета — бесплатные ключи первым девам.</b> Ранние тестеры сохраняют вечную founder-скидку + награду робуксами за запуск с обратной связью.</div>
+<h2>Начать</h2>
+<a class="cta p" href="https://discord.gg/A3MSqwkvn7">Забрать бесплатный ключ →</a>
+<a class="cta g" href="https://github.com/cortex-rbx/roblox-ai-kit">Набор на GitHub</a>
+<a class="cta g" href="/roblox-ai-ru">О сервисе</a>
+<p class="f dim">Ещё по-русски: <a href="/roblox-ai-ru">о сервисе</a> · <a href="/roblox-ai-npc-ru">говорящие NPC</a> · <a href="/roblox-ai-quests-ru">генерация квестов</a> · <a href="/compare">сравнение</a></p>
+</body></html>

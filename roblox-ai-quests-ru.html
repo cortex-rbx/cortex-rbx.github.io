@@ -1,0 +1,48 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="dark">
+<title>Генерация квестов и контента в Roblox с ИИ | Cortex</title>
+<meta name="description" content="Как генерировать квесты, названия и описания предметов, лор в Roblox нейросетью на лету. Один серверный запрос, кэшируй результат мира, оплата робуксами.">
+<meta name="keywords" content="генерация квестов Roblox, ИИ квесты Roblox, генерация предметов Roblox, нейросеть контент Roblox, генерация лора Roblox">
+<meta property="og:type" content="article"><meta property="og:title" content="Генерация квестов и контента в Roblox с ИИ">
+<meta property="og:description" content="Квесты, названия и описания предметов, лор — генерируй на лету одним серверным запросом. Робуксами."><meta property="og:image" content="https://cortex-rbx.github.io/og.png">
+<link rel="canonical" href="https://cortex-rbx.github.io/roblox-ai-quests-ru">
+<link rel="alternate" hreflang="ru" href="https://cortex-rbx.github.io/roblox-ai-quests-ru">
+<link rel="alternate" hreflang="en" href="https://cortex-rbx.github.io/roblox-ai-quests">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","inLanguage":"ru","mainEntity":[
+{"@type":"Question","name":"Как генерировать квесты с ИИ в Roblox?","acceptedAnswer":{"@type":"Answer","text":"Из серверного Script отправьте нейросети системный промпт вроде 'дай один короткий квест под уровень игрока' и получите текст задания. Cortex возвращает готовый текст одним запросом; результат генерации мира стоит кэшировать, чтобы не платить повторно. Оплата робуксами, ключ на сервере."}},
+{"@type":"Question","name":"Как сгенерировать названия и описания предметов в Roblox нейросетью?","acceptedAnswer":{"@type":"Answer","text":"Тот же приём одного запроса с промптом 'придумай меткое название и короткое описание предмета'. Cortex отдаёт текст, который вы вставляете в игру; сгенерированный контент мира кэшируйте, повторы у Cortex бесплатны."}},
+{"@type":"Question","name":"Сколько стоит генерация контента ИИ в Roblox?","acceptedAnswer":{"@type":"Answer","text":"Cortex платит только за выходные токены, вход бесплатен, повторы из кэша даром, ~25 000 выходных токенов за 1 робукс на любой модели. Генерация мира обычно разовая на объект и кэшируется, поэтому суммарная цена низкая. Сейчас бесплатная бета."}}
+]}
+</script>
+<style>
+body{margin:0;background:#05060A;color:#F4F7FB;font:16px/1.65 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;padding:32px 20px;max-width:720px;margin:0 auto}
+a{color:#F4F7FB} h1{font-size:29px;line-height:1.22;margin:6px 0 14px} h2{font-size:20px;margin:28px 0 8px}
+.dim{color:#8A93A6} pre{background:#0C0E14;border:1px solid #1C2030;border-radius:12px;padding:14px;overflow:auto;font:13px/1.5 ui-monospace,monospace}
+.cta{display:inline-block;margin:8px 10px 0 0;padding:11px 16px;border-radius:10px;font-weight:600;text-decoration:none}
+.p{background:#F4F7FB;color:#05060A} .g{border:1px solid #1C2030}
+.reward{background:#0C0E14;border:1px solid #1C2030;border-radius:12px;padding:14px;margin:22px 0}
+.f{margin-top:28px;font-size:13px;line-height:2}
+</style></head><body>
+<p class="dim"><a href="https://cortex-rbx.github.io">Cortex</a> · ИИ для твоей Roblox-игры · <a href="/roblox-ai-ru">о сервисе</a> · <a href="/compare">сравнение</a> · <a href="/roblox-ai-quests">English</a></p>
+<h1>Генерация квестов и контента в Roblox с ИИ</h1>
+<p>Ручной контент кончается — игроки проходят его быстрее, чем ты пишешь. Нейросеть генерирует <b>квесты, названия и описания предметов, лор</b> на лету, под конкретного игрока и ситуацию.</p>
+<h2>Один серверный запрос</h2>
+<pre>local Cortex = require(game.ServerStorage.Cortex)
+local ai = Cortex.new("ТВОЙ_КЛЮЧ")
+
+local quest = ai:ask(
+  "Дай один короткий квест под лес и уровень 5. Одно предложение.",
+  "игрок только вошёл в лесную зону"
+)
+print(quest) --> "Найди пропавшего дровосека у старой мельницы, пока не стемнело."</pre>
+<p>Тот же приём для названий предметов, описаний и лора. <b>Кэшируй</b> сгенерированный контент мира — у Cortex повторы бесплатны.</p>
+<h2>Дёшево, потому что платишь за выход</h2>
+<p>Вход (промпт, контекст) бесплатен, повторы из кэша даром, ставка ~25 000 выходных токенов за 1 робукс. Генерация обычно разовая на объект и кэшируется, так что суммарная цена низкая. Пакет 499 R$ покрывает десятки тысяч генераций.</p>
+<div class="reward">🎁 <b>Открытая бета — бесплатные ключи первым девам.</b> Ранние тестеры сохраняют вечную founder-скидку + награду робуксами за запуск с обратной связью.</div>
+<h2>Начать</h2>
+<a class="cta p" href="https://discord.gg/A3MSqwkvn7">Забрать бесплатный ключ →</a>
+<a class="cta g" href="https://github.com/cortex-rbx/roblox-ai-kit">Набор на GitHub</a>
+<a class="cta g" href="/roblox-ai-ru">О сервисе</a>
+<p class="f dim">Ещё по-русски: <a href="/roblox-ai-ru">о сервисе</a> · <a href="/roblox-ai-npc-ru">говорящие NPC</a> · <a href="/roblox-ai-moderation-ru">модерация чата</a> · <a href="/compare">сравнение</a></p>
+</body></html>
