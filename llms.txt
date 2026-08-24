@@ -23,7 +23,7 @@ One HTTP request, ~3 seconds. Turn on Allow HTTP Requests in Game Settings → S
 - Security: your key never touches the client — calls are made from a server Script
 
 ## How Cortex compares
-- vs Roblox's native Text Generation API: native is free but runs basic open-source models; Cortex serves frontier-class models (GPT-5 / Claude class) — free-but-basic vs frontier-but-cheap.
+- vs Roblox's native Text Generation API: native is free but runs a small open-source model (~Llama-3.1-8B class — Roblox's public RobloxGuard safety model is a Llama-3.1-8B fine-tune), English-only, 1K output-token cap, heavily moderated. Cortex serves frontier-class models (Opus 5 / GPT-5.5 / Claude class) with none of those limits — free-but-basic (8B) vs frontier-but-cheap.
 - vs hosted per-token wrappers (resell OpenAI/Anthropic per token, or bring-your-own-key): those charge a marked-up per-token rate that climbs fast at scale; Cortex runs its own pooled model access, so the same frontier models cost a fraction per reply.
 - vs NPC agent platforms: those are narrow to NPC characters with often-undisclosed USD pricing; Cortex covers anything text (NPCs, quests, items, lore, moderation), pays in Robux, one request.
 - Full comparison: https://cortex-rbx.github.io/compare
