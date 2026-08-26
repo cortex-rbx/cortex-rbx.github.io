@@ -1,232 +1,156 @@
-<title>Cortex — Studio plugin UI</title>
+<title>Cortex — AI terminal for Roblox Studio</title>
 <style>
-  /* Cortex plugin — точная палитра из CortexStudio.lua (коричнево-чёрный пиксель).
-     Один намеренный тёмный мир (док-панель Studio) → single-theme, но всё
-     красим явно, чтобы страница держалась на любом фоне хоста. */
+  /* Cortex — ИИ-терминал в стиле Claude Code. Тёплый коричнево-чёрный,
+     один янтарный акцент, всё моноширинное. Один намеренный тёмный мир →
+     single-theme, но фон и цвета красим явно. */
   :root{
-    --bg:#0a0705; --panel:#17100a; --panel2:#22170e; --line:#6b4f2f;
-    --text:#f2e8d6; --sub:#cdb894; --muted:#9c8360;
-    --accent:#b8823c; --accentL:#e0be82; --ok:#b6c98c; --err:#d17a52;
-    --studio:#141210; --studio2:#1d1a16; --studioline:#000000;
-    --mono:"SFMono-Regular",Consolas,"Liberation Mono",Menlo,monospace;
+    --bg:#100c09; --panel:#17120d; --rail:#1e1710;
+    --text:#e9e0d2; --dim:#9c8b76; --faint:#5f5140; --line:#2a2118;
+    --accent:#d98a3d; --accentD:#a8794a; --ok:#a8c47f; --user:#e0be82;
+    --mono:"SFMono-Regular",ui-monospace,"DejaVu Sans Mono",Consolas,"Liberation Mono",Menlo,monospace;
   }
   *{box-sizing:border-box}
   html,body{margin:0}
   body{
-    background:#0c0a08;
-    color:var(--text); font-family:var(--mono);
+    background:var(--bg); color:var(--text);
+    font-family:var(--mono); font-size:14px; line-height:1.6;
     -webkit-font-smoothing:antialiased;
-    min-height:100vh;
     display:flex; flex-direction:column; align-items:center;
-    padding:24px 14px 48px;
-    background-image:radial-gradient(1200px 600px at 70% -10%, #17130d 0%, #0c0a08 60%);
+    padding:22px 12px 40px; min-height:100vh;
   }
-  .caption{
-    color:var(--muted); font-size:12px; letter-spacing:.12em; text-transform:uppercase;
-    margin:0 0 16px; text-align:center;
-  }
-  .caption b{color:var(--accentL); font-weight:600}
+  .frame{width:100%; max-width:560px}
+  .cap{color:var(--faint); font-size:11px; letter-spacing:.14em; text-transform:uppercase; margin:0 0 12px 2px}
 
-  /* ── Studio-окно (контекст) ───────────────────────────── */
-  .studio{
-    width:100%; max-width:920px;
-    background:var(--studio); border:1px solid var(--studioline);
-    border-radius:6px; overflow:hidden;
-    box-shadow:0 24px 60px -20px #000, 0 2px 0 #2a251d inset;
-    display:flex; flex-direction:column;
-  }
-  .titlebar{
-    height:34px; flex:none; display:flex; align-items:center; gap:8px;
-    padding:0 12px; background:var(--studio2);
-    border-bottom:1px solid #0a0908; font-size:12px; color:var(--muted);
-  }
-  .dot{width:11px;height:11px;border-radius:50%;flex:none}
-  .dot.r{background:#c9564a}.dot.y{background:#d6a53c}.dot.g{background:#6fae57}
-  .titlebar .file{margin-left:6px;color:var(--sub)}
-  .titlebar .tabs{margin-left:auto;display:flex;gap:14px;color:var(--muted)}
-  .titlebar .tabs .on{color:var(--accentL)}
-
-  .work{display:flex; min-height:600px}
-  .viewport{
-    flex:1 1 auto; position:relative; background:
-      linear-gradient(180deg,#20242b 0%, #171b20 55%, #0f1215 100%);
-    overflow:hidden; min-width:0;
-  }
-  /* пол-байтовый baseplate намёк */
-  .viewport .grid{
-    position:absolute; inset:38% -20% -30% -20%;
-    background-image:linear-gradient(#2c3138 1px,transparent 1px),
-      linear-gradient(90deg,#2c3138 1px,transparent 1px);
-    background-size:34px 34px;
-    transform:perspective(520px) rotateX(60deg);
-    opacity:.5;
-  }
-  .viewport .baseplate{
-    position:absolute; left:50%; top:52%; width:120px; height:24px;
-    transform:translate(-50%,-50%); background:#3a4048; border:1px solid #4a515a;
-    box-shadow:0 18px 40px -10px #000;
-  }
-  .viewport .redpart{
-    position:absolute; left:50%; top:40%; width:26px; height:26px;
-    transform:translate(-50%,-50%);
-    background:#ff2f2f; border-radius:3px;
-    box-shadow:0 0 22px 6px rgba(255,60,60,.75), 0 0 6px 2px #ff6a6a;
-  }
-  .viewport .vlabel{
-    position:absolute; left:12px; bottom:10px; font-size:11px; color:#6b7480;
+  /* терминальное окно */
+  .term{
+    background:var(--bg); border:1px solid var(--line); border-radius:8px;
+    overflow:hidden; box-shadow:0 24px 60px -24px #000;
+    display:flex; flex-direction:column; min-height:560px;
   }
 
-  /* ── Cortex док-панель (1:1 из Lua) ───────────────────── */
-  .cortex{
-    flex:none; width:400px; position:relative;
-    background:var(--bg); border-left:2px solid var(--line);
-    display:flex; flex-direction:column;
-  }
-  /* угловые пиксель-скобки */
-  .brk{position:absolute; z-index:10}
-  .brk::before,.brk::after{content:"";position:absolute;background:var(--accent)}
-  .brk.tl{left:6px;top:6px} .brk.tl::before{width:14px;height:3px} .brk.tl::after{width:3px;height:14px}
-  .brk.tr{right:6px;top:6px} .brk.tr::before{width:14px;height:3px;right:0} .brk.tr::after{width:3px;height:14px;right:0}
-  .brk.bl{left:6px;bottom:6px} .brk.bl::before{width:14px;height:3px;bottom:0} .brk.bl::after{width:3px;height:14px;bottom:0}
-  .brk.br{right:6px;bottom:6px} .brk.br::before{width:14px;height:3px;right:0;bottom:0} .brk.br::after{width:3px;height:14px;right:0;bottom:0}
-
-  .head{
-    height:46px; flex:none; position:relative;
-    background:var(--panel); display:flex; align-items:center;
-    padding:0 14px; border-bottom:2px solid var(--accent);
-  }
-  .brand{
-    color:var(--accent); font-weight:900; font-size:22px; line-height:1;
-    letter-spacing:.16em;
-    text-shadow:1px 1px 0 #3a2712, -1px 0 0 #0000;
-  }
-  .model{
-    margin-left:auto; height:28px; display:flex; align-items:center; gap:6px;
-    padding:0 10px; background:var(--panel2); border:1px solid var(--line);
-    color:var(--sub); font-size:13px; cursor:pointer; user-select:none;
-  }
-  .model .cx{color:var(--accentL)}
-  .model:hover{border-color:var(--accent)}
-
-  .log{
-    flex:1 1 auto; overflow-y:auto; padding:14px;
-    display:flex; flex-direction:column; gap:9px;
-    background:var(--bg);
-  }
-  .ln{font-size:14px; line-height:1.45; white-space:pre-wrap; word-break:break-word}
-  .ln.ready{color:var(--text); font-size:15px}
-  .ln.hint{color:var(--sub)}
-  .ln.user{color:var(--text)}
-  .ln.user .bar{color:var(--accent)}
-  .ln.work{color:var(--muted); font-size:13px}
-  .ln.ok{color:var(--ok)}
-  .ln.err{color:var(--err)}
-  .code{
-    background:var(--panel2); border-left:2px solid var(--accent);
-    padding:9px 11px; font-size:12.5px; line-height:1.5; color:var(--sub);
-    overflow-x:auto; white-space:pre;
-  }
-  .code .k{color:var(--accentL)} .code .s{color:#b6c98c} .code .c{color:var(--muted)}
-
+  /* верхняя строка — минимальная */
   .bar{
-    height:90px; flex:none; background:var(--panel);
-    border-top:1px solid var(--line); padding:14px;
+    display:flex; align-items:center; gap:9px; padding:11px 14px;
+    background:var(--panel); border-bottom:1px solid var(--line);
   }
-  .field{
-    height:100%; position:relative; background:var(--panel2);
-    border:2px solid var(--accent); /* показан в фокусе */
-    display:flex; align-items:flex-start;
+  .spark{color:var(--accent)}
+  .wm{color:var(--text); letter-spacing:.28em; font-weight:600; font-size:13px}
+  .ctx{color:var(--faint); font-size:11px; margin-left:2px}
+  .model{
+    margin-left:auto; color:var(--dim); font-size:12.5px;
+    padding:3px 9px; border:1px solid var(--line); border-radius:5px; cursor:pointer;
   }
-  .field .box{
-    flex:1 1 auto; padding:8px 12px; color:var(--text);
-    font-family:var(--mono); font-size:14px; line-height:1.4;
+  .model b{color:var(--user); font-weight:400}
+  .model:hover{border-color:var(--accentD); color:var(--text)}
+
+  /* лог */
+  .log{flex:1 1 auto; padding:16px 16px 8px; display:flex; flex-direction:column; gap:2px; overflow-y:auto}
+  .boot{color:var(--dim); margin-bottom:10px}
+  .boot .g{color:var(--faint)}
+
+  .turn{margin-top:14px; display:flex; flex-direction:column; gap:2px}
+  .you{color:var(--text)}
+  .you .p{color:var(--accent); font-weight:700; margin-right:6px}
+
+  .think{color:var(--dim); margin-top:6px}
+  .think .s{color:var(--accent); animation:pulse 1.4s ease-in-out infinite}
+  @keyframes pulse{0%,100%{opacity:.35}50%{opacity:1}}
+  @media (prefers-reduced-motion:reduce){.think .s{animation:none}}
+
+  /* tool-вывод в рамке (⎿), как в Claude Code */
+  .tool{margin-top:4px; display:grid; grid-template-columns:14px 1fr; column-gap:8px}
+  .tool .b{color:var(--faint)}
+  .tool .body{color:var(--dim)}
+  .tool .body .h{color:var(--text)}
+  .tool .add{color:var(--ok)}
+  .code{
+    margin-top:6px; border-left:2px solid var(--line); padding:2px 0 2px 12px;
+    color:var(--dim); font-size:12.5px; line-height:1.55; white-space:pre; overflow-x:auto;
   }
-  .field .box .ph{color:var(--muted)}
-  .caret{display:inline-block;width:8px;height:16px;background:var(--accentL);
-    margin-left:1px;vertical-align:-3px;animation:blink 1.1s steps(1) infinite}
+  .code .k{color:var(--accentD)} .code .s{color:var(--ok)} .code .n{color:var(--user)}
+  .done{color:var(--ok); margin-top:8px}
+  .done .c{color:var(--faint)}
+
+  /* нижняя строка ввода — как prompt терминала */
+  .prompt{
+    display:flex; align-items:center; gap:8px; padding:13px 16px;
+    border-top:1px solid var(--line); background:var(--panel);
+  }
+  .prompt .p{color:var(--accent); font-weight:700}
+  .prompt .in{flex:1 1 auto; color:var(--text)}
+  .prompt .in .ph{color:var(--faint)}
+  .caret{display:inline-block;width:8px;height:15px;background:var(--user);vertical-align:-2px;margin-left:1px;animation:blink 1.1s steps(1) infinite}
   @keyframes blink{50%{opacity:0}}
   @media (prefers-reduced-motion:reduce){.caret{animation:none}}
-  .send{
-    position:absolute; right:8px; top:50%; transform:translateY(-50%);
-    width:42px; height:42px; background:var(--accent); color:#1a0f02;
-    display:flex; align-items:center; justify-content:center;
-    font-size:18px; cursor:pointer;
-  }
-  .send:hover{background:var(--accentL)}
+  .run{color:var(--faint); font-size:11px; white-space:nowrap}
+  .run b{color:var(--accent)}
 
-  .legend{margin-top:18px;color:var(--muted);font-size:12px;text-align:center;line-height:1.7;max-width:560px}
-  .legend code{color:var(--sub);background:#17130d;padding:1px 6px;border:1px solid #2a2119}
-
-  /* ── телефон: прячем viewport, панель на всю ширину ───── */
-  @media (max-width:720px){
-    .work{min-height:0}
-    .viewport{display:none}
-    .cortex{width:100%; border-left:0; min-height:600px}
-    .studio{max-width:440px}
-  }
+  .legend{margin-top:16px; color:var(--faint); font-size:11.5px; line-height:1.7; max-width:560px}
+  .legend b{color:var(--dim); font-weight:400}
 </style>
 
-<p class="caption">Cortex &nbsp;·&nbsp; <b>как плагин выглядит в Roblox Studio</b></p>
+<p class="cap">Cortex · AI terminal · Roblox Studio plugin</p>
 
-<div class="studio">
-  <div class="titlebar">
-    <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
-    <span class="file">MyGame.rbxl — Roblox Studio</span>
-    <span class="tabs"><span>Home</span><span>Model</span><span class="on">Plugins</span><span>View</span></span>
-  </div>
-  <div class="work">
-    <div class="viewport">
-      <div class="grid"></div>
-      <div class="baseplate"></div>
-      <div class="redpart" title="GlowingRedPart"></div>
-      <div class="vlabel">Workspace ▸ SpawnLocation</div>
+<div class="frame">
+  <div class="term">
+    <div class="bar">
+      <span class="spark">✻</span>
+      <span class="wm">CORTEX</span>
+      <span class="ctx">studio</span>
+      <span class="model">◍ <b>claude</b> ▾</span>
     </div>
 
-    <!-- Cortex dock panel -->
-    <div class="cortex">
-      <span class="brk tl"></span><span class="brk tr"></span>
-      <span class="brk bl"></span><span class="brk br"></span>
+    <div class="log">
+      <div class="boot">готов. <span class="g">опиши, что построить — соберу и запущу прямо в место.</span></div>
 
-      <div class="head">
-        <span class="brand">CORTEX</span>
-        <div class="model"><span class="cx">🧠</span> claude &nbsp;▾</div>
-      </div>
+      <!-- ход 1 -->
+      <div class="turn">
+        <div class="you"><span class="p">›</span>сделай зелье лечения, которое даёт +25 хп</div>
+        <div class="think"><span class="s">✻</span> Thinking…</div>
+        <div class="tool">
+          <span class="b">⎿</span>
+          <div class="body"><span class="h">создаю Tool + серверный скрипт</span>
+<div class="code"><span class="k">local</span> tool = Instance.new(<span class="s">"Tool"</span>)
+tool.Name = <span class="s">"HealingPotion"</span>
+tool.RequiresHandle = <span class="k">false</span>
+tool.Parent = game.StarterPack
 
-      <div class="log">
-        <div class="ln ready">🤖 Cortex ready.</div>
-        <div class="ln hint">Tell me what to build. Try: create a red glowing part above spawn</div>
-
-        <div class="ln user"><span class="bar">▎ </span>сделай красную светящуюся Part над SpawnLocation</div>
-        <div class="ln work">🧠 claude working…</div>
-<div class="code"><span class="k">local</span> spawn = workspace:FindFirstChildWhichIsA(<span class="s">"SpawnLocation"</span>, <span class="k">true</span>)
-<span class="k">local</span> part = Instance.new(<span class="s">"Part"</span>)
-part.Name        = <span class="s">"GlowingRedPart"</span>
-part.Anchored    = <span class="k">true</span>
-part.CanCollide  = <span class="k">false</span>
-part.Material    = Enum.Material.Neon
-part.Color       = Color3.fromRGB(<span class="s">255</span>, <span class="s">0</span>, <span class="s">0</span>)
-part.Size        = Vector3.new(<span class="s">4</span>, <span class="s">4</span>, <span class="s">4</span>)
-part.CFrame      = spawn.CFrame * CFrame.new(<span class="s">0</span>, <span class="s">8</span>, <span class="s">0</span>)
-part.Parent      = workspace</div>
-        <div class="ln ok">✅ done — Ctrl+Z to undo</div>
-
-        <div class="ln user"><span class="bar">▎ </span>when a player touches it, kill them</div>
-        <div class="ln work">🧠 claude working…</div>
-        <div class="ln ok">✅ done — Ctrl+Z to undo</div>
-      </div>
-
-      <div class="bar">
-        <div class="field">
-          <div class="box">теперь сделай кнопку рядом которая её прячет<span class="caret"></span></div>
-          <div class="send">▶</div>
+<span class="k">local</span> s = Instance.new(<span class="s">"Script"</span>, tool)
+s.Source = [[
+  script.Parent.Activated:Connect(<span class="k">function</span>()
+    <span class="k">local</span> h = script.Parent.Parent:FindFirstChildOfClass(<span class="s">"Humanoid"</span>)
+    <span class="k">if</span> h <span class="k">then</span> h.Health = math.min(h.MaxHealth, h.Health + <span class="n">25</span>) <span class="k">end</span>
+  <span class="k">end</span>)
+]]</div>
+          <span class="add">+ HealingPotion (Tool) → StarterPack</span>
+          <span class="add">+ heal.server скрипт</span></div>
         </div>
+        <div class="done">✔ готово <span class="c">· Ctrl+Z отменить</span></div>
+      </div>
+
+      <!-- ход 2 -->
+      <div class="turn">
+        <div class="you"><span class="p">›</span>пусть при использовании играет звук</div>
+        <div class="think"><span class="s">✻</span> Thinking…</div>
+        <div class="tool">
+          <span class="b">⎿</span>
+          <div class="body"><span class="h">патчу heal.server</span>
+          <span class="add">+ Sound (rbxassetid) в HealingPotion</span>
+          <span class="add">~ Activated: Sound:Play()</span></div>
+        </div>
+        <div class="done">✔ готово <span class="c">· Ctrl+Z отменить</span></div>
       </div>
     </div>
-  </div>
-</div>
 
-<p class="legend">
-  Точная палитра плагина: фон <code>#0a0705</code> · акцент <code>#b8823c</code> · текст <code>#f2e8d6</code>.
-  Пиксель-скобки по углам, шапка <code>CORTEX</code>, кнопка модели справа, лог, поле ввода с неоновой рамкой в фокусе.
-  Это рендер 1:1 из <code>CortexStudio.lua</code> — так док-панель встаёт справа в Studio.
-</p>
+    <div class="prompt">
+      <span class="p">›</span>
+      <span class="in">теперь сделай кнопку, которая выдаёт зелье<span class="caret"></span></span>
+      <span class="run">Enter — <b>запустить</b></span>
+    </div>
+  </div>
+
+  <p class="legend">
+    Стиль <b>Claude Code</b>: моноширинный, минимал, <b>✻ Thinking…</b>, tool-вывод в рамке <b>⎿</b>, галочка готово.
+    Тёплый коричнево-чёрный фон <b>#100c09</b>, один янтарный акцент <b>#d98a3d</b>. Так панель встаёт справа в Studio.
+  </p>
+</div>
